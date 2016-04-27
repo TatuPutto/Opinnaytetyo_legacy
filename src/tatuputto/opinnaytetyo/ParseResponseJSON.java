@@ -21,14 +21,13 @@ public class ParseResponseJSON {
 				String description = jObject.getString("description"); //Etsit‰‰n JSON oliosta tiedoston kuvauksen sis‰lt‰v‰ avain
 				JSONObject files = jObject.getJSONObject("files"); //Etsit‰‰n avain, joka sis‰lt‰‰ tiedostojen tarkemmat tiedot nested olioina
 				
-				
 				parseNestedObjects(description, files);
 			}
 			
 			return gists;
 		}
 		catch(JSONException e) {}
-		return gists;
+		return null;
 	}
 	
 	//Puretaan files-olio yksi sisennetty olio kerrallaan
