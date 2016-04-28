@@ -8,6 +8,6 @@ package tatuputto.opinnaytetyo;
  */
 interface APIConnection {
 	//public URLConnection formConnection(String url, String accessToken);
-	public String formConnection(String url, String accessToken);
+	public String formConnection(String method, String url, String data, String accessToken);
 	
 }

@@ -10,7 +10,7 @@ public class GetGistSource {
 	AuthorizedConnection connection = new AuthorizedConnection();
 	
 	public String getSource(String rawUrl, String accessToken) {
-		return connection.formConnection(rawUrl, accessToken);
+		return connection.formConnection("GET", rawUrl, "", accessToken);
 	}
 	
 }

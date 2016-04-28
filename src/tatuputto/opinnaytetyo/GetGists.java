@@ -12,6 +12,6 @@ public class GetGists {
 		String url = "https://api.github.com/gists";
 		
 		//Palautetaan parsittu JSON
-		return parse.parseResponse(connection.formConnection(url, accessToken));
+		return parse.parseResponse(connection.formConnection("GET", url, "", accessToken));
 	}
 }
