@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="C:/Program Files (x86)/httpcomponents-client-4.5.2/lib/httpclient-4.5.2.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files (x86)/httpcomponents-client-4.5.2/lib/httpcore-4.4.4.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files (x86)/httpcomponents-client-4.5.2/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/gson-master/gson-2.2.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

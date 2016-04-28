@@ -1,11 +1,20 @@
 package tatuputto.opinnaytetyo;
 
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 /**
  * 
@@ -24,7 +33,7 @@ public class CreateGist {
 		System.out.println("Gist description");
 		String desc = input.nextLine();
 		
-		//for(int i = 0; i < 2; i++) {
+		/*for(int i = 0; i < 2; i++) {
 			
 			input.nextLine();
 			System.out.println("Filename");
@@ -34,8 +43,14 @@ public class CreateGist {
 			fileSources.add(input.nextLine());
 			
 			
-		//}
+		}*/
 		
+		filenames.add("Testfile1.java");
+		filenames.add("Testfile2.java");
+		
+		fileSources.add("public class Testfile1 {}");
+		fileSources.add("public class Testfile2 {}");
+
 		encodeJSON(desc, filenames, fileSources);
 		input.close();
 	}
@@ -43,34 +58,35 @@ public class CreateGist {
 	//Tehdään syötteen pohjalta tarvittavat JSON-oliot
 	public void encodeJSON(String desc, ArrayList<String> filename, ArrayList<String> code) {
 		try {
+			JSONObject requestJSON = new JSONObject();
+			JSONObject files = new JSONObject();
 			
-			JSONObject obj = new JSONObject();
-
-			obj.put("description", desc);
-			obj.put("public", "false");
+			requestJSON.put("description", desc);
+			requestJSON.put("public", "false");
 			
-			//JSONObject combine = new JSONObject();
+		
 			for(int i = 0; i < filename.size(); i++) {
-				JSONObject nestedfiles2 = new JSONObject();
-				nestedfiles2.put("content", code.get(i));
+				JSONObject file = new JSONObject();
+				file.put("content", code.get(i));
+			
+				files.put(filename.get(i), file);
 				
-				
-				JSONObject nestedfiles = new JSONObject();
-				nestedfiles.put(filename.get(i), nestedfiles2);
-				
-				obj.accumulate("files", nestedfiles);
 			}
 			
-	
-			System.out.print(obj);
-			//sendGist(obj);
+			//System.out.println(nested);
+			requestJSON.put("files", files);
+			System.out.print(requestJSON);
+			
 			String url = "https://api.github.com/gists";
-			String data = obj.toString();
-			String accessToken = "c6a07d2fce28b39405409ce97513a4d8c605b9f4";
+			String data = requestJSON.toString();
+			String accessToken = "8c12e3f78956b6b03e57d10a100676d3726e8f77";
 			
 			connection.formConnection("POST", url, data, accessToken);
 		}
-		catch(JSONException e) {}
+		catch(JSONException e) {
+			e.printStackTrace();
+			System.out.println("JSON käsittelyssä tapahtui virhe.");
+		}
 	
 	}
 }
