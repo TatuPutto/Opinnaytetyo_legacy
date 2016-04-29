@@ -2,9 +2,11 @@ package tatuputto.opinnaytetyo;
 
 import java.util.ArrayList;
 
-
+/**
+ * Haetaan kaikki kirjautuneen käyttäjän gistit. Jos käyttäjä ei ole kirjautunut haetaan uusimmat julkiset gistit.
+ */
 public class GetGists {
-	ParseResponseJSON parse = new ParseResponseJSON();
+	ParseMultipleGistsJSON parse = new ParseMultipleGistsJSON();
 	AuthorizedConnection connection = new AuthorizedConnection();
 	
 	//Haetaan gistit
@@ -12,6 +14,6 @@ public class GetGists {
 		String url = "https://api.github.com/gists";
 		
 		//Palautetaan parsittu JSON
-		return parse.parseResponse(connection.formConnection("GET", url, "", accessToken));
+		return parse.parseJSON(connection.formConnection("GET", url, "", accessToken));
 	}
 }

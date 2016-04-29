@@ -35,7 +35,7 @@ public class AuthorizedConnection implements APIConnection {
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 
 			//Muodostetaan ja lisätään auktorisointi header pyyntöön
-	    	accessToken = "8c12e3f78956b6b03e57d10a100676d3726e8f77";
+	    	accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
 		    String authString = "token " + accessToken;
 		    httpMethod.addHeader("Authorization", authString);
 			CloseableHttpResponse response = httpClient.execute(httpMethod);

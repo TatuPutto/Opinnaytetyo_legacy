@@ -3,18 +3,13 @@ package tatuputto.opinnaytetyo;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-
-/**
- * 
- * @author Tatu Putto
- * Tämä luokka hoitaa uuden gistin luomisen
- */
-public class CreateGist {
+public class EditGist {
 	AuthorizedConnection connection = new AuthorizedConnection();
 	EncodeJSON encodejson = new EncodeJSON();
 	
-	public void createNewGist() {
+	public void patchGist(int gistId) {
+		
+		
 		ArrayList<String> filenames = new ArrayList<String>();
 		ArrayList<String> fileSources = new ArrayList<String>();
 		Scanner input = new Scanner(System.in);
@@ -35,7 +30,7 @@ public class CreateGist {
 			
 		}*/
 		
-		filenames.add("Testfile3.java");
+		filenames.add("UpdatedTestFile3.java");
 		filenames.add("Testfile4.java");
 		
 		fileSources.add("public class Testfile3 {}");
@@ -44,12 +39,13 @@ public class CreateGist {
 		
 		input.close();
 		
-		String url = "https://api.github.com/gists";
-		String data = encodejson.encodeJSONRequestPOST(desc, false, filenames, fileSources).toString();
+		String url = "https://api.github.com/gists/" + gistId;
+		String data = encodejson.encodeJSONRequest(desc, filenames, fileSources).toString();
 		String accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
 		
-		connection.formConnection("POST", url, data, accessToken);
-		
+		connection.formConnection("PATCH", url, data, accessToken);
 		
 	}
+	
+	
 }

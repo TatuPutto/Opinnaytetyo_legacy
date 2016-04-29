@@ -1,46 +1,43 @@
 package tatuputto.opinnaytetyo;
 
-public class Gist {
-	private String filename;
-	private String description;
-	private String language;
-	private String rawUrl;
+import java.util.ArrayList;
 
+public class Gist {
+	private String id;
+	private String description;
+	private ArrayList<GistFile> files;
+	//TODO hae tarkemmat tiedot: omistaja, luonti/päivitys aika, lyhennetty yms.
 	
-	public Gist(String filename, String description, String language, String rawUrl) {
-		this.filename = filename;
+	public Gist(String id, String description, ArrayList<GistFile> files) {
+		this.id = id;
 		this.description = description;
-		this.language = language;
-		this.rawUrl = rawUrl;
+		this.files = files;
 	}
 	
-	public String getFilename() {
-		return filename;
+	
+	public String getId() {
+		return id;
 	}
-	public void setFilename(String filename) {
-		this.filename = filename;
+	public void setId(String id) {
+		this.id = id;
 	}
+	
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getLanguage() {
-		return language;
+	public ArrayList<GistFile> getFiles() {
+		return files;
 	}
-	public void setLanguage(String language) {
-		this.language = language;
+	public void setFiles(ArrayList<GistFile> files) {
+		this.files = files;
 	}
-	public String getRawUrl() {
-		return rawUrl;
-	}
-	public void setRawUrl(String rawUrl) {
-		this.rawUrl = rawUrl;
-	}
-	
+
+
 	public String toString() {
-		return this.filename + ", " + this.description + ", " + this.language + ", " + this.rawUrl;  
+		return "ID: " + this.id + "\nKuvaus: " + this.description + "\nTiedostot: " + this.files;  
 	}
 	
 }
