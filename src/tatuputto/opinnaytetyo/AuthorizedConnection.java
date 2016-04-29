@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -35,7 +36,7 @@ public class AuthorizedConnection implements APIConnection {
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 
 			//Muodostetaan ja lisätään auktorisointi header pyyntöön
-	    	accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
+	    	//accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
 		    String authString = "token " + accessToken;
 		    httpMethod.addHeader("Authorization", authString);
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
@@ -123,6 +124,14 @@ public class AuthorizedConnection implements APIConnection {
 				e.printStackTrace();
 			}
 		}
+		else if(method.equals("PATCH")) {
+			//TODO 
+		}
+		else if(method.equals("DELETE")) {
+			HttpDelete httpDelete = new HttpDelete(url);
+			return httpDelete;
+		}
+		
 		return null;
 	}
 	
