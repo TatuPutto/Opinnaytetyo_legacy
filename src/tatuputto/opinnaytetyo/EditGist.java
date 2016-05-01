@@ -4,21 +4,28 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class EditGist {
+	GetSingleGist getGist = new GetSingleGist();
 	AuthorizedConnection connection = new AuthorizedConnection();
 	EncodeJSON encodejson = new EncodeJSON();
 	
-	public void patchGist(int gistId) {
+	public void patchGist(String gistId, String accessToken) {
 		
+		Gist gistToEdit = getGist.getGist(accessToken, gistId);
 		
-		ArrayList<String> filenames = new ArrayList<String>();
-		ArrayList<String> fileSources = new ArrayList<String>();
+		ArrayList<String> filesToUpdate = new ArrayList<String>();
+		ArrayList<String> updatedFilenames = new ArrayList<String>();
+		ArrayList<String> updatedSources = new ArrayList<String>();
 		Scanner input = new Scanner(System.in);
 		
 		
 		System.out.println("Gist description");
-		String desc = input.nextLine();
+		//String desc = input.nextLine();
+		String desc = "First edit";
 		
-		/*for(int i = 0; i < 2; i++) {
+		
+	/*
+		int files = gistToEdit.getFiles().size();
+		for(int i = 0; i < files; i++) {
 			
 			input.nextLine();
 			System.out.println("Filename");
@@ -28,20 +35,30 @@ public class EditGist {
 			fileSources.add(input.nextLine());
 			
 			
-		}*/
+		}
+		*/
 		
-		filenames.add("UpdatedTestFile3.java");
-		filenames.add("Testfile4.java");
+		filesToUpdate.add("Testfile1.java");
 		
-		fileSources.add("public class Testfile3 {}");
-		fileSources.add("public class Testfile4 {}");
-
+		updatedFilenames.add("Testfile1Updated.java");
+		updatedSources.add("{private int sum;}");
+		/*
+		filenames.add("UpdatedTestFile1.java");
+		filenames.add("Testfile2.java");
+		filenames.add("FileAddedThroughEdit.java");
+		
+		fileSources.add("public class Testfile1 {private int sum;}");
+		fileSources.add("public class Testfile2 {System.out.print(\"Hello!\")}");
+		fileSources.add("public class FileAddedThroughEdit {}");
+		*/
+		
+		
+		
 		
 		input.close();
-		
+		//encodejson.encodeJSONRequestPATCH(desc, filesToUpdate, updatedFilenames, updatedSources);
 		String url = "https://api.github.com/gists/" + gistId;
-		String data = encodejson.encodeJSONRequest(desc, filenames, fileSources).toString();
-		String accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
+		String data = encodejson.encodeJSONRequestPATCH(desc, filesToUpdate, updatedFilenames, updatedSources).toString();
 		
 		connection.formConnection("PATCH", url, data, accessToken);
 		

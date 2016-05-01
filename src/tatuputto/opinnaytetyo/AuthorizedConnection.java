@@ -9,6 +9,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
@@ -125,7 +126,18 @@ public class AuthorizedConnection implements APIConnection {
 			}
 		}
 		else if(method.equals("PATCH")) {
-			//TODO 
+			HttpPatch httpPatch = new HttpPatch(url);
+			httpPatch.addHeader("Content-Type", "application/x-www-form-urlencoded");
+			StringEntity params;
+			
+			try {
+				params = new StringEntity(data);
+				httpPatch.setEntity(params);
+				return httpPatch;
+			}
+			catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
 		else if(method.equals("DELETE")) {
 			HttpDelete httpDelete = new HttpDelete(url);
@@ -134,16 +146,5 @@ public class AuthorizedConnection implements APIConnection {
 		
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 

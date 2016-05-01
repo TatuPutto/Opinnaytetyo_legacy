@@ -40,20 +40,19 @@ public class EncodeJSON {
 		}
 		
 		
-		public JSONObject encodeJSONRequestPATCH(String desc, ArrayList<String> filename, ArrayList<String> code) {
+		public JSONObject encodeJSONRequestPATCH(String desc, ArrayList<String> filesToUpdate, ArrayList<String> updatedFilenames, ArrayList<String> updatedSources) {
 			try {
 				JSONObject requestJSON = new JSONObject();
 				JSONObject files = new JSONObject();
 				
 				requestJSON.put("description", desc);
 				
-			
-				for(int i = 0; i < filename.size(); i++) {
+
+				for(int i = 0; i < filesToUpdate.size(); i++) {
 					JSONObject file = new JSONObject();
-					file.put("content", code.get(i));
-				
-					files.put(filename.get(i), file);
-					
+					file.put("filename", updatedFilenames.get(i));
+					file.put("content", updatedSources.get(i));
+					files.put(filesToUpdate.get(i), file);
 				}
 				
 				//System.out.println(nested);
@@ -64,7 +63,7 @@ public class EncodeJSON {
 			}
 			catch(JSONException e) {
 				e.printStackTrace();
-				System.out.println("JSON käsittelyssä tapahtui virhe.");
+				System.out.println("JSONin käsittelyssä tapahtui virhe.");
 			}
 			
 			return null;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Main {
 	
 	public static void main(String[] args) {
-		String accessToken = "57c4acd67406542a2ecfb80527adf75c4bbebb42";
+		String accessToken = "";
 		ArrayList<Gist> gists = new ArrayList<Gist>();
 		
 		GetGists getGists = new GetGists();
@@ -13,20 +13,27 @@ public class Main {
 		
 		//getGists.getGists(accessToken);
 		
+		//Hae kaikki gistit && yksittäisen gistin tiedoston koodi
 		//gists = getGists.getGists(accessToken);
 		//System.out.println(getGistSource.getSource(gists.get(1).getRawUrl(), accessToken));
 		
+		//Luo gist
+		CreateGist createGist = new CreateGist();
+		createGist.createNewGist(accessToken);
 		
-		//CreateGist createGist = new CreateGist();
-		//createGist.createNewGist();
 		
-		
+		//Hae yksi gist
 		//GetSingleGist getSingleGist = new GetSingleGist();
 		//System.out.println(getSingleGist.getGist(accessToken, "1682557972e98f15f0d034eecb6a62f9"));
 		
 		//System.out.println(getGists.getGists(accessToken));
 		
-		DeleteGist delete = new DeleteGist();
-		delete.deleteGist(accessToken, "1682557972e98f15f0d034eecb6a62f9");
+		//Poista
+		//DeleteGist delete = new DeleteGist();
+		//delete.deleteGist(accessToken, "1682557972e98f15f0d034eecb6a62f9");
+		
+		//Muokkaa
+		//EditGist edit = new EditGist();
+		//edit.patchGist("da5da7c5226317c9e1b50f79209c688a", accessToken);
 	}
 }

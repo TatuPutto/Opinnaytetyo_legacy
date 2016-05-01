@@ -14,7 +14,7 @@ public class CreateGist {
 	AuthorizedConnection connection = new AuthorizedConnection();
 	EncodeJSON encodejson = new EncodeJSON();
 	
-	public void createNewGist() {
+	public void createNewGist(String accessToken) {
 		ArrayList<String> filenames = new ArrayList<String>();
 		ArrayList<String> fileSources = new ArrayList<String>();
 		Scanner input = new Scanner(System.in);
@@ -46,7 +46,7 @@ public class CreateGist {
 		
 		String url = "https://api.github.com/gists";
 		String data = encodejson.encodeJSONRequestPOST(desc, false, filenames, fileSources).toString();
-		String accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
+		//String accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
 		
 		connection.formConnection("POST", url, data, accessToken);
 		
