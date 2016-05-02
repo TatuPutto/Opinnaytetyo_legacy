@@ -1,5 +1,6 @@
 package tatuputto.opinnaytetyo;
 
+import java.util.ArrayList;
 
 /**
  * 
@@ -8,6 +9,6 @@ package tatuputto.opinnaytetyo;
  */
 interface APIConnection {
 	//public URLConnection formConnection(String url, String accessToken);
-	public String formConnection(String method, String url, String data, String accessToken);
+	public ArrayList<String> formConnection(String method, String url, String data, String accessToken);
 	
 }

@@ -1,55 +1,42 @@
 package tatuputto.opinnaytetyo;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 
-/**
- * 
- * @author Tatu Putto
- * Tämä luokka hoitaa uuden gistin luomisen
- */
-public class CreateGist {
+@WebServlet("/CreateGist")
+public class CreateGist extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	AuthorizedConnection connection = new AuthorizedConnection();
 	EncodeJSON encodejson = new EncodeJSON();
-	
-	public void createNewGist(String accessToken) {
-		ArrayList<String> filenames = new ArrayList<String>();
-		ArrayList<String> fileSources = new ArrayList<String>();
-		Scanner input = new Scanner(System.in);
-		
-		
-		System.out.println("Gist description");
-		String desc = input.nextLine();
-		
-		/*for(int i = 0; i < 2; i++) {
-			
-			input.nextLine();
-			System.out.println("Filename");
-			filenames.add(input.nextLine());
-			
-			System.out.println("Code");
-			fileSources.add(input.nextLine());
-			
-			
-		}*/
-		
-		filenames.add("Testfile3.java");
-		filenames.add("Testfile4.java");
-		
-		fileSources.add("public class Testfile3 {}");
-		fileSources.add("public class Testfile4 {}");
-
-		
-		input.close();
+ 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String description = request.getParameter("description");
+		Boolean isPublic =  Boolean.parseBoolean(request.getParameter("ispublic"));
+		String[] filenames = request.getParameterValues("filenames[]");
+		String[] sources = request.getParameterValues("sources[]");
+		String accessToken = "f0658406e005c2569f0d968f40da48cfd433c4e1";
 		
 		String url = "https://api.github.com/gists";
-		String data = encodejson.encodeJSONRequestPOST(desc, false, filenames, fileSources).toString();
-		//String accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
+		//Lähetetään gistille asetut tiedot muunnettavaksi JSON-muotoon
+		String data = encodejson.encodeJSONRequestPOST(description, isPublic, filenames, sources).toString();
+		ArrayList<String> responseContent = connection.formConnection("POST", url, data, accessToken);
 		
-		connection.formConnection("POST", url, data, accessToken);
 		
+		//Lähetetään pyynnön vastauskoodi
+		//lisäys onnistui: 201 - CREATED
+		//ei onnistunut: 401 - Unauthorized / 422 - Unprocessable Entity 
+		response.setContentType("application/text");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));
 		
 	}
+
 }

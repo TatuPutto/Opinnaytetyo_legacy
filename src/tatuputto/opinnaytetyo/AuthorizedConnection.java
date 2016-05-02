@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -30,7 +31,7 @@ public class AuthorizedConnection implements APIConnection {
 	 * @param accessToken Käyttäjäkohtainen avain, jonka avulla voidaan tehda muutoksia käyttäjän gisteihin API:n välityksellä.
 	 * @return Palauttaa vastauksen sisällön String muodossa.
 	 */
-	public String formConnection(String method, String url, String data, String accessToken) {
+	public ArrayList<String> formConnection(String method, String url, String data, String accessToken) {
 		//Avataan yhteys ja lisataan mukaan auktorisointi header
 		try {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -62,10 +63,15 @@ public class AuthorizedConnection implements APIConnection {
 	 * @param response Palvelimen vastaus lähetettyyn pyyntöön.
 	 * @return Vastauksen sisältö(body, ei headereita) String muodossa.
 	 */
-	private String readResponse(CloseableHttpResponse response) {
-		//Vastauskoodi
-		System.out.println(response.getStatusLine().getStatusCode());
-		System.out.println(response.getStatusLine().getReasonPhrase());
+	private ArrayList<String> readResponse(CloseableHttpResponse response) {
+		
+		ArrayList<String> responseContent = new ArrayList<String>();
+		responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
+		responseContent.add(response.getStatusLine().getReasonPhrase());
+		
+		
+		//System.out.println(response.getStatusLine().getStatusCode());
+		//System.out.println(response.getStatusLine().getReasonPhrase());
 		HttpEntity entity = response.getEntity();
 		
 		String line = "";
@@ -76,10 +82,10 @@ public class AuthorizedConnection implements APIConnection {
 	        	while ((line = br1.readLine()) != null) {
 	        		str = str.concat(line + "\n");
 				}
-	        	System.out.println(str);
+	        	//System.out.println(str);
 	        	response.close();
-	        	
-	        	return str;
+	        	responseContent.add(str);
+	        	return responseContent;
 	        } 
 	        catch(IOException e) { 	
 	        	System.out.println("Vastausta ei pystytty lukemaan.");

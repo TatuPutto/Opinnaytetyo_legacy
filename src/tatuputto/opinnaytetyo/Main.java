@@ -3,9 +3,9 @@ package tatuputto.opinnaytetyo;
 import java.util.ArrayList;
 
 public class Main {
-	
+	/*
 	public static void main(String[] args) {
-		String accessToken = "";
+		String accessToken = "f0658406e005c2569f0d968f40da48cfd433c4e1";
 		ArrayList<Gist> gists = new ArrayList<Gist>();
 		
 		GetGists getGists = new GetGists();
@@ -35,5 +35,5 @@ public class Main {
 		//Muokkaa
 		//EditGist edit = new EditGist();
 		//edit.patchGist("da5da7c5226317c9e1b50f79209c688a", accessToken);
-	}
+	}*/
 }
