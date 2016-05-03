@@ -17,9 +17,9 @@
 	
 	<input type="text" id="snippetDescription" placeholder="Kuvaus"/><br><br>
 	
-	<div class="gistFile">
+	<div id="gistFile">
 		<input type="text" class="filename" placeholder="Tiedostonimi, esim. File.java"/>
-		<div id="snippetCode" style="height:200px;"></div>
+		<div id="snippetCode" style="height:200px;width:600px;"></div>
 	</div>
 	<input type="button" id="addFile" value="Add file" onclick="addFile()"/>
 	<input type="button" id="createSecret" value="Create secret gist"/>
