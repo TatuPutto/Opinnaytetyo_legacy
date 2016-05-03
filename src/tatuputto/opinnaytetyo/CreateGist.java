@@ -14,15 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/CreateGist")
 public class CreateGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	AuthorizedConnection connection = new AuthorizedConnection();
-	EncodeJSON encodejson = new EncodeJSON();
  
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		AuthorizedConnection connection = new AuthorizedConnection();
+		EncodeJSON encodejson = new EncodeJSON();
+		
 		String description = request.getParameter("description");
 		Boolean isPublic =  Boolean.parseBoolean(request.getParameter("ispublic"));
 		String[] filenames = request.getParameterValues("filenames[]");
 		String[] sources = request.getParameterValues("sources[]");
-		String accessToken = "f0658406e005c2569f0d968f40da48cfd433c4e1";
+		String accessToken = "8bd36e199d0c9ff60b1a86d94c72a0e05e089fb5";
 		
 		String url = "https://api.github.com/gists";
 		//L‰hetet‰‰n gistille asetut tiedot muunnettavaksi JSON-muotoon

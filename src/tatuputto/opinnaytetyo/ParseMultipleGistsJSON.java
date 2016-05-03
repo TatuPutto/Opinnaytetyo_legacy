@@ -21,9 +21,9 @@ public class ParseMultipleGistsJSON {
 				JSONObject jObject = jArray.getJSONObject(i); //Muodostetaan jokaisesta taulukon indeksist‰ JSON olio
 				String gistId = jObject.getString("id"); //Etsit‰‰n JSON oliosta gistin id
 				String description = jObject.getString("description"); //Etsit‰‰n JSON oliosta tiedoston kuvauksen sis‰lt‰v‰ avain
-				JSONObject files = jObject.getJSONObject("files"); //Etsit‰‰n avain, joka sis‰lt‰‰ tiedostojen tarkemmat tiedot nested olioina
+				JSONObject files = jObject.getJSONObject("files"); //Etsit‰‰n avain, joka sis‰lt‰‰ tiedostojen tarkemmat tiedot sisennettyin‰ olioina
 				
-				gists.add(new Gist(gistId, description, parseNestedObjects(description, files)));
+				gists.add(new Gist(gistId, description, parseNestedObjects(files)));
 			}
 			
 			return gists;
@@ -33,7 +33,7 @@ public class ParseMultipleGistsJSON {
 	}
 	
 	//Puretaan files-olio yksi sisennetty olio kerrallaan
-	public ArrayList<GistFile> parseNestedObjects(String description, JSONObject files) {
+	public ArrayList<GistFile> parseNestedObjects(JSONObject files) {
 		ArrayList<GistFile> gistFiles = new ArrayList<GistFile>();
 		Iterator<?> iterator = files.keys();
 		

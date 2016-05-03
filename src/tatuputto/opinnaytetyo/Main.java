@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Main {
 	/*
 	public static void main(String[] args) {
-		String accessToken = "f0658406e005c2569f0d968f40da48cfd433c4e1";
+		String accessToken = "8bd36e199d0c9ff60b1a86d94c72a0e05e089fb5";
 		ArrayList<Gist> gists = new ArrayList<Gist>();
 		
 		GetGists getGists = new GetGists();

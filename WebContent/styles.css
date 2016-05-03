@@ -1,0 +1,21 @@
+
+.listing {
+	background-color: lightblue;
+}
+
+#listGists {
+	float: left;
+	width: 40%;
+	background-color: green;
+}
+
+#gistSource {
+	width: 40%;
+	height: 600px;
+	margin-left: 40%;
+}
+
+.singleGist {
+	border-style: solid;
+	border-width: 1px;
+}
