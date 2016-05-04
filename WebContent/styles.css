@@ -9,10 +9,20 @@
 	background-color: green;
 }
 
-#gistSource {
+#gistFiles {
 	width: 40%;
-	height: 600px;
+	height: 900px;
 	margin-left: 40%;
+	border-style: solid;
+	border-width: 1px;
+}
+
+#gistSource {
+	//width: 40%;
+	//height: 400px;
+	//margin-left: 40%;
+	border-style: solid;
+	border-width: 1px;
 }
 
 .singleGist {
