@@ -1,17 +1,37 @@
 package tatuputto.opinnaytetyo.gists;
 
-/**
- * Haetaan yksittäinen gist.
- *
- */
-public class GetSingleGist {
-	ParseSingleGistJSON parse = new ParseSingleGistJSON();
-	AuthorizedConnection connection = new AuthorizedConnection();
-	
-	public Gist getGist(String accessToken, String gistId) {
+import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.json.GetGistFilesJSON;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/GetSingleGistServlet")
+public class GetSingleGist extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//ParseSingleGistJSON parse = new ParseSingleGistJSON();
+		GetGistFilesJSON files = new GetGistFilesJSON();
+		AuthorizedConnection connection = new AuthorizedConnection();
+		
+		String gistId = request.getParameter("id");
+		String accessToken = "";
 		String url = "https://api.github.com/gists/" + gistId;
 		
-		//Palautetaan parsittu JSON
-		return parse.parseJSON(connection.formConnection("GET", url, "", accessToken));
+		ArrayList<String> responseContent = connection.formConnection("GET", url, "", accessToken);
+		//Gist gist = parse.parseJSON(responseContent.get(2));
+		
+		String data = files.GetGistFiles(responseContent.get(2)).toString();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(data);
 	}
+
 }

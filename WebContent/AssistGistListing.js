@@ -1,13 +1,20 @@
 var editor;
 var editors = [];
-var i = 2;
+var i = 1;
 
 $("document").ready(function() {
+	var firstGist = $("#listGists").find(".singleGist").first().attr("id");
+	getGistFiles(firstGist);
+	
 	
 	$(".singleGist").click(function() {
 		//var rawUrl = $(this).data("rawurl");
 		//getSource(rawUrl);
+		$(".singleGist").removeClass("selected");
+		$(this).addClass("selected");
+		
 		var gistId = $(this).attr("id");
+		removeFields();
 		getGistFiles(gistId);
 	});
 	
@@ -61,10 +68,10 @@ function getGistFiles(gistId) {
 
 //Lisätään uusi kenttä
 function addField(filename, fileContent, amountOfLines) {	
-	$("#gistFiles").append("<div id=\"gistSource" + i + "\" style=\"border-style: solid;border-width: 1px;\"></div>");
+	$("#gistFiles").append("<div id=\"gistExtra" + i + "\" style=\"border-style: solid;border-width: 1px;\"></div>");
 
 	//Tehdään luodusta <div> elementistä uusi ACE-editor ja lisätään editori taulukkoon.
-	var makeEditorOf = "gistSource" + i;
+	var makeEditorOf = "gistExtra" + i;
 	editors.push(ace.edit(makeEditorOf));
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
 	editors[editors.length - 1].setReadOnly(true);
@@ -72,5 +79,13 @@ function addField(filename, fileContent, amountOfLines) {
 	editors[editors.length - 1].setValue(fileContent);
 	
 	i++;
+}
+
+
+function removeFields() {
+	editors = [];
+	editor.setValue("");
+	
+	$("#gistFiles").find('div[id^="gistExtra"]').remove();
 }
 	
