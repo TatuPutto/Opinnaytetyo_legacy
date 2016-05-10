@@ -21,8 +21,8 @@
 		<input type="text" class="filename" placeholder="Tiedostonimi, esim. File.java"/>
 		<div id="snippetCode" style="height:200px;width:600px;"></div>
 	</div>
-	<input type="button" id="addFile" value="Add file" onclick="addFile()"/>
-	<input type="button" id="createSecret" value="Create secret gist"/>
-	<input type="button" id="createPublic" value="Create public gist"/><br>
+	<input type="button" id="addFile" value="Lisää tiedosto"/>
+	<input type="button" id="createSecret" value="Luo salainen gist"/>
+	<input type="button" id="createPublic" value="Luo julkinen gist"/><br>
 </body>
 </html>

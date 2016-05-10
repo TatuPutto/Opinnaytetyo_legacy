@@ -21,10 +21,13 @@ public class ParseMultipleGistsJSON {
 
 			//K‰yd‰‰n muodostettu JSON taulukko olio kerrallaan l‰pi
 			for (int i = 0; i < jArray.length(); i++) {
-				JSONObject jObject = jArray.getJSONObject(i); //Muodostetaan jokaisesta taulukon indeksist‰ JSON olio
-				String gistId = jObject.getString("id"); //Etsit‰‰n JSON oliosta gistin id
-				String description = jObject.getString("description"); //Etsit‰‰n JSON oliosta tiedoston kuvauksen sis‰lt‰v‰ avain
-				JSONObject files = jObject.getJSONObject("files"); //Etsit‰‰n avain, joka sis‰lt‰‰ tiedostojen tarkemmat tiedot sisennettyin‰ olioina
+				//Muodostetaan jokaisesta taulukon indeksist‰ JSON olio
+				JSONObject jObject = jArray.getJSONObject(i); 
+			
+				String gistId = jObject.getString("id");
+				String description = jObject.getString("description"); 
+				//Etsit‰‰n avain, joka sis‰lt‰‰ gistin tiedostot
+				JSONObject files = jObject.getJSONObject("files"); 
 				
 				gists.add(new Gist(gistId, description, parseNestedObjects(files)));
 			}

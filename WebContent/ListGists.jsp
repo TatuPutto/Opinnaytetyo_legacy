@@ -12,7 +12,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="AssistGistListing.js" type="text/javascript"></script>
+<script src="ShowGistFiles.js" type="text/javascript"></script>
+<script src="ListGistFiles.js" type="text/javascript"></script>
+
 
 
 <title>Gists</title>
@@ -21,45 +23,38 @@
 <%@ include file="Header.jsp" %>
 
 <div id="wrapper">
+	<!-- Listataan gistit -->
+	<div id="listGists">
 
-	<div id="">
-	
+		<% 
+		if (request.getAttribute("gists") != null) {
+			ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
 
-		<div id="listGists">
-			
-				
-			<%
-		
-			
-			if (request.getAttribute("gists") != null) {
-				ArrayList<Gist> gistList = (ArrayList)request.getAttribute("gists");
-					 
-				for(int i = 0; i < gistList.size(); i++) { %>
-					<div class="singleGist" id="<%= gistList.get(i).getId() %>" data-rawurl="<%= gistList.get(i).getFiles().get(0).getRawUrl() %>">
-						<p><%=gistList.get(i).getFiles().get(0).getFilename() %></p>
-						<p><%=gistList.get(i).getDescription() %></p>			
-					</div> <% 
-				}
+			for (int i = 0; i < gistList.size(); i++) { 
+				%>
+				<div class="singleGist" id="<%=gistList.get(i).getId()%>"
+				  data-rawurl="<%=gistList.get(i).getFiles().get(0).getRawUrl()%>">
+					<p><%=gistList.get(i).getFiles().get(0).getFilename()%></p>
+					<p><%=gistList.get(i).getDescription()%></p>
+				</div>
+				<%
 			}
-			else {
-				out.println("Gistejä ei löytynyt");
-			}
-			
-			
-			%>
-				
-			
-		
-		
-		</div>
-	
-		
-		
-		<div id="gistFiles">
-			<div id="gistSource"></div>
-		</div>
+		} 
+		else {
+			out.println("Gistejä ei löytynyt");
+		}
+		%>
 	</div>
+
 	
+	
+	
+	<!-- Yksittäisen gistin tiedostot -->
+	<div id="gistFiles">
+		<div id="gistSource"></div>
+		<div id="loading"></div>
+	</div>
 </div>
+
 </body>
 </html>

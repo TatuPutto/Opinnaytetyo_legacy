@@ -26,7 +26,7 @@ public class GetGists extends HttpServlet {
 		AuthorizedConnection connection = new AuthorizedConnection();
 		
 		String url = "https://api.github.com/gists";
-		String accessToken = "";
+		String accessToken = "c72276ff4963b622806d1f141b907b465106b4e8";
 		
 		ArrayList<String> responseContent = connection.formConnection("GET", url, "", accessToken);
 		ArrayList<Gist> gists = parse.parseJSON(responseContent.get(2));

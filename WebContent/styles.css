@@ -5,16 +5,19 @@
 
 #listGists {
 	float: left;
-	width: 40%;
+	width: 30%;
 	background-color: green;
 }
 
-#gistFiles {
-	width: 40%;
-	height: 900px;
-	margin-left: 40%;
+.gistFile {
 	border-style: solid;
 	border-width: 1px;
+}
+
+#gistFiles {
+	width: 60%;
+	height: 900px;
+	margin-left: 40%;
 }
 
 #gistSource {
@@ -26,10 +29,17 @@
 }
 
 .singleGist {
+	cursor: pointer;
 	border-style: solid;
 	border-width: 1px;
 }
 
 .selected {
 	background-color: white;
+}
+
+#loading {
+	background: url(loading.gif) no-repeat center center;
+	height: 90%;
+	display: none;
 }

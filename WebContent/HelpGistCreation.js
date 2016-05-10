@@ -7,14 +7,19 @@ $(document).ready(function() {
 	editor.getSession().setMode("ace/mode/java");
 	editors.push(editor);
 	
-	//Julkinen Gist
+	//Aloita julkisen gistin luominen
 	$("#createPublic").click(function() {
 		initiateGistCreation("true");
 	});
 
-	//Salainen Gist
+	//Aloita salaisen gistin luominen
 	$("#createSecret").click(function() {
 		initiateGistCreation("false");
+	});
+	
+	//Lisätään kenttä
+	$("#addFile").click(function() {
+		addFile();
 	});
 
 	//Poistetaan kenttä
@@ -32,14 +37,13 @@ function initiateGistCreation(isPublic) {
 	var sources = [];
 	var filenames = [];
 	var description = $("#snippetDescription").val();
-	var filenameFields = document.getElementsByClassName("filename");
+	var filenameFields = $(".filename");
 
 	//Lisätään tiedostonimet ja lähdekoodit taulukoihin.
 	for(var j = 0; j < editors.length; j++) {
 		if(filenameFields[j].value != "") {
 			filenames.push(filenameFields[j].value);
 			sources.push(editors[j].getValue());
-			alert(filenames[j]);
 		}
 		else {
 			alert("Tiedostonimi ei voi olla tyhjä.");
@@ -62,7 +66,7 @@ function initiateGistCreation(isPublic) {
 function addFile() {
 	$("#gistFile").append("<div class=\"extraFile\">" +
 			"<input type=\"text\" class=\"filename\" placeholder=\"Tiedostonimi, esim. File.java\"/>" + 
-			"<input type=\"button\" class=\"removeField\" value=\"Remove file\">" +
+			"<input type=\"button\" class=\"removeField\" value=\"Poista tiedosto\">" +
 			"<div id=\"snippetCode" + i + "\" style=\"height:200px;width:600px;\"></div>" +
 			"</div>" 
 	);

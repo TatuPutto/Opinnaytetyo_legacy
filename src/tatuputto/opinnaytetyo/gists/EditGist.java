@@ -3,19 +3,19 @@ package tatuputto.opinnaytetyo.gists;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.json.EncodeJSON;
+
 public class EditGist {
-	GetSingleGist getGist = new GetSingleGist();
+	GetSingleGistAJAX getGist = new GetSingleGistAJAX();
 	AuthorizedConnection connection = new AuthorizedConnection();
 	EncodeJSON encodejson = new EncodeJSON();
 	
 	public void patchGist(String gistId, String accessToken) {
 		
-		Gist gistToEdit = getGist.getGist(accessToken, gistId);
+		//Gist gistToEdit = getGist.getGist(accessToken, gistId);
 		
-		ArrayList<String> filesToUpdate = new ArrayList<String>();
-		ArrayList<String> updatedFilenames = new ArrayList<String>();
-		ArrayList<String> updatedSources = new ArrayList<String>();
-		Scanner input = new Scanner(System.in);
+		
 		
 		
 		System.out.println("Gist description");
@@ -38,10 +38,10 @@ public class EditGist {
 		}
 		*/
 		
-		filesToUpdate.add("Testfile1.java");
+		/*filesToUpdate.add("Testfile1.java");
 		
 		updatedFilenames.add("Testfile1Updated.java");
-		updatedSources.add("{private int sum;}");
+		updatedSources.add("{private int sum;}");*/
 		/*
 		filenames.add("UpdatedTestFile1.java");
 		filenames.add("Testfile2.java");
@@ -53,9 +53,11 @@ public class EditGist {
 		*/
 		
 		
+		String[] filesToUpdate = new String[2];
+		String[] updatedFilenames = new String[2];
+		String[] updatedSources = new String[2];
 		
 		
-		input.close();
 		//encodejson.encodeJSONRequestPATCH(desc, filesToUpdate, updatedFilenames, updatedSources);
 		String url = "https://api.github.com/gists/" + gistId;
 		String data = encodejson.encodeJSONRequestPATCH(desc, filesToUpdate, updatedFilenames, updatedSources).toString();
