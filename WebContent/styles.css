@@ -1,21 +1,64 @@
 
-.listing {
-	background-color: lightblue;
+#header {
+	 background-color: lightblue;
+	 height: 50px;
 }
+
+ul#navmenu {
+    padding: 0;
+    padding-top: 15px;
+}
+
+ul#navmenu li {
+    display: inline;
+}
+
+ul#navmenu li a {
+    padding: 10px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+ul#navmenu li a:hover {
+    background-color: white;
+}
+
+#content {
+	width: 90%;
+	margin-top: 50px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 
 #listGists {
 	float: left;
-	width: 30%;
-	background-color: green;
+	width: 35%;
+	height: 90%;
+	overflow-y: scroll;
 }
 
-#editableFiles {
-	width: 70%;
+#gistBase {
+	margin-left: auto;
+    margin-right: auto;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 4px;
+	background-color: #e6e6e6;
+	padding-bottom: 4px;
+	margin-bottom: 20px;
+}
+
+#files {
+	width: 50%;
     margin-left: auto;
     margin-right: auto;
-    //border-radius: 4px;
-    //border-style: solid;
-	//border-width: 1px;
+}
+
+#buttons {
+	width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 div[class*="gistFile"] {

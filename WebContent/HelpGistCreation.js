@@ -1,10 +1,12 @@
-var i = 2;
 var editors = [];
+var editorNum = 1;
 
 //Alustetaan ensimmäinen editori, kun sivusto on ladattu
 $(document).ready(function() {
-	editor = ace.edit("snippetCode");
+	editor = ace.edit("editor");
 	editor.getSession().setMode("ace/mode/java");
+	editor.setOptions({minLines: 20});
+	editor.setOptions({maxLines: 60});
 	editors.push(editor);
 	
 	//Aloita julkisen gistin luominen
@@ -23,8 +25,8 @@ $(document).ready(function() {
 	});
 
 	//Poistetaan kenttä
-	$("#gistFile").on("click", ".removeField", function() {
-		$(this).parent().remove();
+	$("#files").on("click", ".removeFile", function() {
+		$(this).closest("[class^=gistFile]").remove();
 	});
 });
 
@@ -65,18 +67,21 @@ function initiateGistCreation(isPublic) {
 
 //Lisätään kenttä uudelle tiedostolle.
 function addFile() {
-	$("#gistFile").append("<div class=\"extraFile\">" +
+	$("#files").append("<div class=\"gistFile" + editorNum + "\">" +
+			"<div class=\"gistInfo\">" +
 			"<input type=\"text\" class=\"filename\" placeholder=\"Tiedostonimi, esim. File.java\"/>" + 
-			"<input type=\"button\" class=\"removeField\" value=\"Poista tiedosto\">" +
-			"<div id=\"snippetCode" + i + "\" style=\"height:200px;width:600px;\"></div>" +
-			"</div>" 
+			"<input type=\"button\" class=\"removeFile\" value=\"Poista\" style=\"margin-left: 4px;\"/>" +
+			"</div>" +
+			"<div id=\"editor" + editorNum +  "\"</div>" 
 	);
-
+	
 	//Tehdään luodusta <div> elementistä uusi ACE-editor ja lisätään editori taulukkoon.
-	var makeEditorOf = "snippetCode" + i;
+	var makeEditorOf = "editor" + editorNum;
 	editors.push(ace.edit(makeEditorOf));
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
+	editors[editors.length - 1].setOptions({minLines: 20});
+	editors[editors.length - 1].setOptions({maxLines: 60});
 	
-	i++;
+	editorNum++;
 }
 

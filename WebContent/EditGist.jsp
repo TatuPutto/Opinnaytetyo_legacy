@@ -17,10 +17,9 @@
 <title>Edit gist</title>
 </head>
 <body>
-<%@ include file="Header.jsp" %>
-<div id="wrapper">
+	<%@ include file="Header.jsp" %>
 	<!-- Listataan gistit -->
-	<div id="editableFiles">
+	<div id="files">
 
 		<% //data-content="<%=gist.getFiles().get(i).getContent()
 		if (request.getAttribute("gist") != null) {
@@ -50,15 +49,10 @@
 			out.println("Gistiä ei löytynyt");
 		}
 		%>
-		<div class="buttons">
-			<input type="button" id="addFile" value="Lisää tiedosto"/>
-			<input type="button" id="updateGist" value="Päivitä" style="float: right;"/>
-		</div>
 	</div>
-	
-	
-
-</div>
-
+	<div id="buttons">
+		<input type="button" id="addFile" value="Lisää tiedosto"/>
+		<input type="button" id="updateGist" value="Päivitä" style="float: right;"/>
+	</div>
 </body>
 </html>

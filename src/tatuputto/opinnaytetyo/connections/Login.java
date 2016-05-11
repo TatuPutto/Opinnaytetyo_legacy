@@ -19,12 +19,12 @@ public class Login extends HttpServlet {
 		Cookie[] cookies = null;
 	    cookies = request.getCookies();
 		
-	    //Jos sessio on jo olemassa ohjataan käyttäjä takaisin etusivulle
-	    if(request.getSession() == null) {
+	    /*//Jos sessio on jo olemassa ohjataan käyttäjä takaisin etusivulle
+	    if(request.getSession(false) != null) {
 	    	response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
-	    }
+	    }*/
 	    //Jos accesstokenin sisältävä eväste löytyy, aloitetaan uusi sessio
-	    else if(cookies != null){
+	    if(cookies != null){
 	    	for (int i = 0; i < cookies.length; i++){
 	    		cookie = cookies[i];
 	    		

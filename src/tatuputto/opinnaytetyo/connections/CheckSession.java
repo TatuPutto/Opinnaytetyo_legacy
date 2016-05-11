@@ -40,7 +40,6 @@ public class CheckSession implements Filter {
 		}
 		
 		req.setAttribute("accessToken", accessToken);
-		req.setAttribute("asd", "asd123");
 		chain.doFilter(req, res);
 	}
 

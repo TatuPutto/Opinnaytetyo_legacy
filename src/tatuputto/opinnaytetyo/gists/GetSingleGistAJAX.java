@@ -1,6 +1,7 @@
 package tatuputto.opinnaytetyo.gists;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.GetGistFilesJSON;
 
 import java.io.IOException;
@@ -18,13 +19,25 @@ public class GetSingleGistAJAX extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		GetGistFilesJSON files = new GetGistFilesJSON();
-		AuthorizedConnection connection = new AuthorizedConnection();
+		AuthorizedConnection AuthConnection = new AuthorizedConnection();
+		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
 		String gistId = request.getParameter("id");
-		String accessToken = "f08ced82cc79020c2e3e992516421db6557e0f64";
 		String url = "https://api.github.com/gists/" + gistId;
+		String accessToken = (String)request.getAttribute("accessToken");
 		
-		ArrayList<String> responseContent = connection.formConnection("GET", url, "", accessToken);
+		ArrayList<String> responseContent;
+		Gist gist;
+		
+		//Jos accesstoken löytyy voidaan hakea julkisia ja salaisia gistejä
+		if(accessToken != null && !accessToken.isEmpty()) {
+			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
+		}
+		//Jos accesstokenia ei löydy voidaan hakea vain julkisia
+		else {
+			responseContent = UnauthConnection.formConnection("GET", url, "");
+		}
+		
 		
 		String data = files.GetGistFiles(responseContent.get(2)).toString();
 		response.setContentType("application/json");

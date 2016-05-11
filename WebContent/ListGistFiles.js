@@ -2,6 +2,7 @@ var editor;
 var editors = [];
 
 $("document").ready(function() {
+	$("#content").css("height", ($(window).height() - 120));
 	$("#loading").show();
 	
 	//Haetaan ensimmäisen gistin tiedostot sivun latauksen valmistuttua
@@ -19,7 +20,7 @@ $("document").ready(function() {
 		
 		$(".singleGist").removeClass("selected");
 		$(this).addClass("selected");
-		$("#gistSource").hide();
+		$("#gistBase").hide();
 		$("#loading").show();
 	});
 	

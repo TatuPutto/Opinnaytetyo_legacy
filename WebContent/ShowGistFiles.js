@@ -11,7 +11,7 @@ ShowGistFiles.prototype.reset = function() {
 	editors = [];
 	editor.setValue("");
 	
-	$("#gistFiles").find('div[id^="gistExtra"]').remove();
+	$("#gistFiles").find('div[class^="gistFile"]').remove();
 }
 
 
@@ -21,8 +21,6 @@ ShowGistFiles.prototype.getGistFiles = function() {
 	var data = {id : gistId};
 	
 	$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
-		$("#loading").hide();
-		$("#gistSource").show();
 		addUtilityButtons(gistId);
 		handleResponse(response);
 	});
@@ -40,13 +38,14 @@ function handleResponse(response) {
 		var amountOfLines = fileContent.split("\n").length; 
 		
 		//Lisätään ensimmäisen tiedoston koodi jo olemassa olevaan editoriin.
-		if(i == 0) {			
-			editor = ace.edit("gistSource");
+		if(i == 0) {
+			$(".filename").first().val(filename);
+			editor = ace.edit("editor");
 			editor.getSession().setMode("ace/mode/java");
-			editor.setReadOnly(true);
 			editor.setOptions({ maxLines: amountOfLines });
 			editor.setValue(fileContent);
-			editor.$blockScrolling = Infinity;
+			editor.setReadOnly(true);
+			editor.selection.moveTo((amountOfLines + 1), 0);
 			
 			i++;
 		}
@@ -55,6 +54,9 @@ function handleResponse(response) {
 			addField(filename, fileContent, amountOfLines);
 		}	
 	}
+	
+	$("#loading").hide();
+	$("#gistBase").show();
 }
 
 //Lisätään napit gistin muokkaamista ja poistamista varten
@@ -62,7 +64,7 @@ function handleResponse(response) {
 function addUtilityButtons(gistId) {
 	$("#gistFiles").find("#deleteGist").remove();
 	$("#gistFiles").find("#editGist").remove();
-	
+
 	$("#gistFiles").prepend("<input type=\"button\" id=\"deleteGist\" value=\"Poista\" data-gistid=" + gistId + "></input>");
 	$("#gistFiles").prepend("<input type=\"button\" id=\"editGist\" value=\"Muokkaa\" data-gistid=" + gistId + "></input>");
 }
@@ -70,16 +72,24 @@ function addUtilityButtons(gistId) {
 
 //Lisätään uusi kenttä
 function addField(filename, fileContent, amountOfLines) {
-	$("#gistFiles").append("<div id=\"gistExtra" + i + "\" style=\"border-style: solid;border-width: 1px;\"></div>");
+	$("#gistFiles").append("<div class=\"gistFile" + i + "\">" +
+			"<div class=\"gistInfo\">" +
+			"<input type=\"text\" class=\"filename\" value=\"" + filename + "\" readonly/>" + 
+			"</div>" +
+			"<div id=\"editor" + i + "\"</div>" 
+	);
+	
+	
 	
 	//Tehdään luodusta <div> elementistä uusi ACE-editor ja lisätään editori taulukkoon.
-	var makeEditorOf = "gistExtra" + i;
+	var makeEditorOf = "editor" + i;
 	editors.push(ace.edit(makeEditorOf));
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
-	editors[editors.length - 1].setReadOnly(true);
 	editors[editors.length - 1].setOptions({ maxLines : amountOfLines });
 	editors[editors.length - 1].setValue(fileContent);
-	editors[editors.length - 1].$blockScrolling = Infinity
+	editors[editors.length - 1].setReadOnly(true);
+	editors[editors.length - 1].selection.moveTo((amountOfLines + 1), 0);
+	
 	i++;
 }
 

@@ -21,7 +21,7 @@ $("document").ready(function() {
 		removeFile($(this));
 	});
 	
-	$("#editableFiles").on("click", ".removeFile", function() {
+	$("#files").on("click", ".removeFile", function() {
 		removeFile($(this));
 	});
 });
@@ -30,18 +30,14 @@ $("document").ready(function() {
 //Otetaan gistin tiedot 
 function getUnmodifiedData() {
 	var fields = $("[class^=gistFile]");
-
 	var filenameFields = document.getElementsByClassName("filename");
-	
 	
 	for(var i = 0; i < fields.length; i++) {
 		fname = filenameFields[i].value;
-		
 		var content = $("." + $(fields[i]).attr("class") + " div p:first").text();
 		var amountOfLines = content.split("\n").length; 
 
 		createEditor(fields[i], content, amountOfLines);
-		
 		filesUnmodified.push({filename: fname, content: content});	
 	}
 }
@@ -53,8 +49,8 @@ function createEditor(fields, content, amountOfLines) {
 	var makeEditorOf = "editor" + editorNum;
 	editors.push(ace.edit(makeEditorOf));
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
-	editors[editors.length - 1].setOptions({ minLines :  10});
-	editors[editors.length - 1].setOptions({ maxLines :  30});
+	editors[editors.length - 1].setOptions({ minLines :  20});
+	editors[editors.length - 1].setOptions({ maxLines :  40});
 	editors[editors.length - 1].setValue(content);
 	editors[editors.length - 1].selection.moveTo((amountOfLines + 1), 0);
 
@@ -64,7 +60,7 @@ function createEditor(fields, content, amountOfLines) {
 
 //Lisätään kenttä uudelle tiedostolle.
 function addFile() {
-	$(".buttons").prepend("<div class=\"gistFile" + editorNum + "\">" +
+	$("#files").append("<div class=\"gistFile" + editorNum + "\">" +
 			"<div class=\"gistInfo\">" +
 			"<input type=\"text\" class=\"filename\" placeholder=\"Tiedostonimi, esim. File.java\"/>" + 
 			"<input type=\"button\" class=\"removeFile\" value=\"Poista\" style=\"margin-left: 4px;\"/>" +
@@ -76,8 +72,8 @@ function addFile() {
 	var makeEditorOf = "editor" + editorNum;
 	editors.push(ace.edit(makeEditorOf));
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
-	editors[editors.length - 1].setOptions({ minLines :  10});
-	editors[editors.length - 1].setOptions({ maxLines :  30});
+	editors[editors.length - 1].setOptions({ minLines :  20});
+	editors[editors.length - 1].setOptions({ maxLines :  40});
 	
 	editorNum++;
 }

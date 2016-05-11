@@ -15,14 +15,12 @@
 <script src="ShowGistFiles.js" type="text/javascript"></script>
 <script src="ListGistFiles.js" type="text/javascript"></script>
 
-
-
 <title>Gists</title>
 </head>
 <body>
 <%@ include file="Header.jsp" %>
 
-<div id="wrapper">
+<div id="content">
 	<!-- Listataan gistit -->
 	<div id="listGists">
 
@@ -50,8 +48,13 @@
 	
 	
 	<!-- Yksittäisen gistin tiedostot -->
-	<div id="gistFiles">
-		<div id="gistSource"></div>
+	<div id="gistFiles"><br>
+		<div id="gistBase">
+			<div class="gistInfo">
+				<input type="text" class="filename" value=""></input>
+			</div>
+			<div id="editor"></div>
+		</div>
 		<div id="loading"></div>
 	</div>
 </div>
