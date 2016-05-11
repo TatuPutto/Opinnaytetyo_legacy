@@ -21,9 +21,13 @@ $("document").ready(function() {
 		removeFile($(this));
 	});
 	
+	$("#editableFiles").on("click", ".removeFile", function() {
+		removeFile($(this));
+	});
 });
 
 
+//Otetaan gistin tiedot 
 function getUnmodifiedData() {
 	var fields = $("[class^=gistFile]");
 
@@ -60,8 +64,11 @@ function createEditor(fields, content, amountOfLines) {
 
 //Lisätään kenttä uudelle tiedostolle.
 function addFile() {
-	$("#editableFiles").append("<br><br><div class=\"gistFile\">" +
+	$(".buttons").prepend("<div class=\"gistFile" + editorNum + "\">" +
+			"<div class=\"gistInfo\">" +
 			"<input type=\"text\" class=\"filename\" placeholder=\"Tiedostonimi, esim. File.java\"/>" + 
+			"<input type=\"button\" class=\"removeFile\" value=\"Poista\" style=\"margin-left: 4px;\"/>" +
+			"</div>" +
 			"<div id=\"editor" + editorNum +  "\"</div>" 
 	);
 
@@ -75,80 +82,41 @@ function addFile() {
 	editorNum++;
 }
 
-//Poistetaan tiedosto
-function removeFile(target) {
-	$(target).parent().hide();
-	//var fname = $("." + $(target.parent()).attr("class") + " input:first").val();
-	//var fname = $("." + target).next().val();
-	var fname = $(target).prev().val();
-	$(target).prev().val("");
-	
-	
-	
-	
-	
-	var id = $(target).parent().attr("class");
-	
-	var fileNum = id.substring(id.length - 1);
-	//$("." + $(target.parent()).attr("class") + " input:first").val("");
-	
-	
-	
-	editors[fileNum].setValue("");
-	
-	
-	//filesToBeEdited[fname] = {};
-}
 
+//Piilotetaan kenttä ja asetetaan tiedostonimi ja koodi tyhjäksi
+function removeFile(target) {
+	$(target).closest("[class^=gistFile]").hide();
+	
+	var parentClass = $(target).closest("[class^=gistFile]").attr("class");
+	var fileNum = parentClass.substring(parentClass.length - 1);
+	editors[fileNum].setValue("");
+	$(target).prev().val("");
+}
 
 
 function getFieldValues() {
 	var data = {};
 	var description = $("#description").val();
 	var fname = document.getElementsByClassName("filename");
-	
-	/*//Lisätään tiedostonimet ja lähdekoodit taulukoihin.
-	for(var j = 0; j < editors.length; j++) {
-		if(filenameFields[j].value != "") {
-			filenames.push(filenameFields[j].value);
-			sources.push(editors[j].getValue());
-			alert(filenames[j]);
-		}
-		else {
-			alert("Tiedostonimi ei voi olla tyhjä.");
-			return;
-		}
-	}*/
-	
+
 	//Tarkistetaan onko alkuperäisiin tiedostioihin tehty muutoksia
 	var i = 0;
 	for(var property in filesUnmodified) {
 		var nameChanged = false;
 		var contentChanged = false;
 		
-		var filenameOriginal = filesUnmodified[property]["filename"];
-		var contentOriginal = filesUnmodified[property]["content"];
+		var filenameUnmodified = filesUnmodified[property]["filename"];
+		var contentUnmodified = filesUnmodified[property]["content"];
 		var filenameOnUpdate = fname[i].value;
 		var contentOnUpdate = editors[i].getValue();
 		
 		
-		
-		
 		//Tarkistetaan onko tiedostonimiä muokattu
-		if(filenameOriginal === filenameOnUpdate) {
-			console.log("Tiedostonimeä ei muutettu");
-		}
-		else {
-			console.log("Tiedostonimeä on muutettu")
+		if(filenameUnmodified !== filenameOnUpdate) {
 			nameChanged = true;
 		}
-		
 		//Tarkistetaan onko tiedoston koodia muokattu
-		if(contentOriginal === contentOnUpdate) {
-			console.log("content ei muutosta");
-		}
-		else {
-			console.log("content on muutettu")
+		if(contentUnmodified !== contentOnUpdate) {
 			contentChanged = true;
 		}
 		
@@ -192,10 +160,10 @@ function getFieldValues() {
 		
 	
 	
-	$.post("http://localhost:8080/Opinnaytetyo/EditGistServlet", JSON.stringify(data), function(response) {
+	/*$.post("http://localhost:8080/Opinnaytetyo/EditGist", JSON.stringify(data), function(response) {
 		alert(response);
 		window.location.href = "http://localhost:8080/Opinnaytetyo/";
-	}, "json");
+	}, "json");*/
 	
 
 	

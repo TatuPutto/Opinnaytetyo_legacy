@@ -1,6 +1,7 @@
 package tatuputto.opinnaytetyo.gists;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.EncodeJSON;
 
 import java.io.IOException;
@@ -18,19 +19,30 @@ public class CreateGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
  
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthorizedConnection connection = new AuthorizedConnection();
 		EncodeJSON encodejson = new EncodeJSON();
+		AuthorizedConnection connection = new AuthorizedConnection();
+		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
 		String description = request.getParameter("description");
 		Boolean isPublic =  Boolean.parseBoolean(request.getParameter("ispublic"));
 		String[] filenames = request.getParameterValues("filenames[]");
 		String[] sources = request.getParameterValues("sources[]");
-		String accessToken = "<accessToken>";
 		
+		ArrayList<String> responseContent;
 		String url = "https://api.github.com/gists";
+		String accessToken = (String)request.getAttribute("accessToken");
+		
 		//Lähetetään gistille asetut tiedot muunnettavaksi JSON-muotoon
 		String data = encodejson.encodeJSONRequestPOST(description, isPublic, filenames, sources).toString();
-		ArrayList<String> responseContent = connection.formConnection("POST", url, data, accessToken);
+		
+		//Jos accesstoken löytyy muodostetaan yhteys auktorisoituna käyttäjänä -> haetaan käyttäjän gistit(julkiset ja salaiset)
+		if(accessToken != null && !accessToken.isEmpty()) {
+			responseContent = connection.formConnection("POST", url, data, accessToken);
+		}
+		//Jos accesstokenia ei löytdy muodostetaan yhteys anonyyminä -> haetaan muiden käyttäjien julkisia gistejä
+		else {
+			responseContent = UnauthConnection.formConnection("POST", url, data);
+		}
 		
 		
 		//Lähetetään pyynnön vastauskoodi

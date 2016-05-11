@@ -1,19 +1,38 @@
 package tatuputto.opinnaytetyo.gists;
 
-import java.util.ArrayList;
-
 import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
- * 
- * @author Tatu
- * Tämä luokka hakee gistin sisältämän tiedoston lähdekoodin
+ * Servlet implementation class GetSingleGistServlets
  */
-public class GetGistSource {
-	AuthorizedConnection connection = new AuthorizedConnection();
+@WebServlet("/GetGistSource")
+public class GetGistSource extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	
-	public ArrayList<String> getSource(String rawUrl, String accessToken) {
-		return connection.formConnection("GET", rawUrl, "", accessToken);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		AuthorizedConnection connection = new AuthorizedConnection();
+		
+		String rawUrl = request.getParameter("rawurl");
+		
+		String accessToken = "<accessToken>";
+		
+			
+		ArrayList<String> responseContent = connection.formConnection("GET", rawUrl, "", accessToken);
+		
+		response.setContentType("application/text");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(responseContent.get(2));
 	}
+
 	
 }

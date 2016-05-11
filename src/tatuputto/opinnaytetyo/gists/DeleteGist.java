@@ -27,7 +27,7 @@ public class DeleteGist extends HttpServlet {
 		ArrayList<String> responseContent = connection.formConnection("DELETE", url, "", accessToken);
 		//log("ID = " + gistId + " URL = " + url + " " + responseContent.get(0) + " " + responseContent.get(1));
 		//TODO lähetä vastauskoodit
-		response.sendRedirect(request.getContextPath());
+		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
 	}
 
 }

@@ -8,6 +8,7 @@ import java.net.URLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,22 +39,20 @@ public class GetAccessToken extends HttpServlet {
    		URLConnection connection = getAccessToken.openConnection();
    		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
    		
-   		String inputLine = "";
-   		while((inputLine = br.readLine()) != null) {
-   			//bw.write(inputLine);
-   			log(inputLine);
-   			
+   		String line = "";
+   		if(br != null){
+   			line = br.readLine();
    		}
    		
-   		redirectToFrontPage(request, response, inputLine);
-   	
+        log(line);	
+        String[] token = line.split("&");
+        token = token[0].split("=");
+        
+   		Cookie accessToken = new Cookie("accesstoken", token[1]);
+   		accessToken.setMaxAge(60*60*24*7); 
+   		response.addCookie(accessToken);
+   		
+   		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
+   		
    	}
-
-   	
-   	private void redirectToFrontPage(HttpServletRequest request, HttpServletResponse response, String accessToken) throws ServletException, IOException {
-   		//Ohjataan k‰ytt‰j‰ takaisin etusivulle ja l‰hetet‰‰n access token mukana
-   		request.setAttribute("accessToken", accessToken);
-   		response.sendRedirect("ListGists.jsp");
-   	}
-   	
 }

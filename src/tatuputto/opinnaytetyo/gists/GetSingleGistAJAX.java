@@ -21,7 +21,7 @@ public class GetSingleGistAJAX extends HttpServlet {
 		AuthorizedConnection connection = new AuthorizedConnection();
 		
 		String gistId = request.getParameter("id");
-		String accessToken = "c72276ff4963b622806d1f141b907b465106b4e8";
+		String accessToken = "f08ced82cc79020c2e3e992516421db6557e0f64";
 		String url = "https://api.github.com/gists/" + gistId;
 		
 		ArrayList<String> responseContent = connection.formConnection("GET", url, "", accessToken);

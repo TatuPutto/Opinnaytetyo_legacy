@@ -1,70 +1,64 @@
 package tatuputto.opinnaytetyo.gists;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
 import tatuputto.opinnaytetyo.json.EncodeJSON;
 
-public class EditGist {
-	GetSingleGistAJAX getGist = new GetSingleGistAJAX();
-	AuthorizedConnection connection = new AuthorizedConnection();
-	EncodeJSON encodejson = new EncodeJSON();
-	
-	public void patchGist(String gistId, String accessToken) {
+
+@WebServlet("/EditGist")
+public class EditGist extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+   
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		AuthorizedConnection connection = new AuthorizedConnection();
+		EncodeJSON encodejson = new EncodeJSON();
 		
-		//Gist gistToEdit = getGist.getGist(accessToken, gistId);
+		String accessToken = "f08ced82cc79020c2e3e992516421db6557e0f64";
+		String url = "https://api.github.com/gists/f99404b40846ae22ca4b0df222bc5d7a";
 		
-		
-		
-		
-		System.out.println("Gist description");
-		//String desc = input.nextLine();
-		String desc = "First edit";
-		
-		
-	/*
-		int files = gistToEdit.getFiles().size();
-		for(int i = 0; i < files; i++) {
+		/*try {
 			
-			input.nextLine();
-			System.out.println("Filename");
-			filenames.add(input.nextLine());
-			
-			System.out.println("Code");
-			fileSources.add(input.nextLine());
+			JSONObject jObj = new JSONObject(request.getParameter("files"));
 			
 			
+			log(""+jObj);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		*/
+		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+        String json = "";
+        if(br != null){
+            json = br.readLine();
+        }
 		
-		/*filesToUpdate.add("Testfile1.java");
-		
-		updatedFilenames.add("Testfile1Updated.java");
-		updatedSources.add("{private int sum;}");*/
-		/*
-		filenames.add("UpdatedTestFile1.java");
-		filenames.add("Testfile2.java");
-		filenames.add("FileAddedThroughEdit.java");
-		
-		fileSources.add("public class Testfile1 {private int sum;}");
-		fileSources.add("public class Testfile2 {System.out.print(\"Hello!\")}");
-		fileSources.add("public class FileAddedThroughEdit {}");
-		*/
+        
+        log(json);
+       ArrayList<String> responseContent = connection.formConnection("PATCH", url, json, accessToken);
 		
 		
-		String[] filesToUpdate = new String[2];
-		String[] updatedFilenames = new String[2];
-		String[] updatedSources = new String[2];
-		
-		
-		//encodejson.encodeJSONRequestPATCH(desc, filesToUpdate, updatedFilenames, updatedSources);
-		String url = "https://api.github.com/gists/" + gistId;
-		String data = encodejson.encodeJSONRequestPATCH(desc, filesToUpdate, updatedFilenames, updatedSources).toString();
-		
-		connection.formConnection("PATCH", url, data, accessToken);
+		//Lähetetään pyynnön vastauskoodi
+		//lisäys onnistui: 201 - CREATED
+		//ei onnistunut: 401 - Unauthorized / 422 - Unprocessable Entity 
+		response.setContentType("application/text");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));
 		
 	}
-	
-	
+
 }

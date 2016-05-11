@@ -59,6 +59,7 @@ function initiateGistCreation(isPublic) {
 	//AJAX-kutsu Gistin luontimetodiin.
 	$.post("http://localhost:8080/Opinnaytetyo/CreateGist", data, function(response) {
 		alert(response);
+		window.location = "http://localhost:8080/Opinnaytetyo/";
 	});
 }
 

@@ -34,12 +34,15 @@
 				
 				%>
 				<div class="<%=fileNum %>">
-					<input type="text" class="filename" value="<%=gist.getFiles().get(i).getFilename() %>"></input>
-					<input type="button" class="removeFile" value="Poista"/>
+					<div class="gistInfo">
+						<input type="text" class="filename" value="<%=gist.getFiles().get(i).getFilename() %>"></input>
+						<input type="button" class="removeFile" value="Poista"/>
+					</div>
+					
 					<div id="<%=editorNum %>">
 						<p id="content"><%=gist.getFiles().get(i).getContent() %></p>	
 					</div>
-				</div><br><br>
+				</div>
 				<%
 			}
 		} 
@@ -47,12 +50,13 @@
 			out.println("Gistiä ei löytynyt");
 		}
 		%>
-		
-	
+		<div class="buttons">
+			<input type="button" id="addFile" value="Lisää tiedosto"/>
+			<input type="button" id="updateGist" value="Päivitä" style="float: right;"/>
+		</div>
 	</div>
 	
-	<br><input type="button" id="addFile" value="Lisää tiedosto"/>
-	<input type="button" id="updateGist" value="Päivitä" style="float: right;"/>
+	
 
 </div>
 
