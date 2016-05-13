@@ -17,54 +17,6 @@ import org.apache.http.entity.StringEntity;
 
 public class Connection {
 	/**
-	 * Lukee vastauksen sisällön.
-	 * @param response Palvelimen vastaus lähetettyyn pyyntöön.
-	 * @return Vastauksen sisältö(body, ei headereita) String muodossa.
-	 */
-	protected ArrayList<String> readResponse(CloseableHttpResponse response) {
-		
-		ArrayList<String> responseContent = new ArrayList<String>();
-		responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
-		responseContent.add(response.getStatusLine().getReasonPhrase());
-		
-		
-		//System.out.println(response.getStatusLine().getStatusCode());
-		//System.out.println(response.getStatusLine().getReasonPhrase());
-		HttpEntity entity = response.getEntity();
-		
-		String line = "";
-		String str = "";
-	    if (entity != null) {
-	    	//Käsitellään vastauksen sisältö rivi kerrallaan
-	        try(BufferedReader br1 = new BufferedReader(new InputStreamReader(entity.getContent()))) {
-	        	while ((line = br1.readLine()) != null) {
-	        		str = str.concat(line + "\n");
-				}
-	        	//System.out.println(str);
-	        	response.close();
-	        	responseContent.add(str);
-	        	return responseContent;
-	        } 
-	        catch(IOException e) { 	
-	        	System.out.println("Vastausta ei pystytty lukemaan.");
-	        }
-	        finally {
-	        	if(response != null) {
-	        		try {
-	        			response.close();
-	        		} 
-	        		catch (IOException e) {
-	        			e.printStackTrace();
-	        		}
-	        	}
-	        }
-	    }
-	    return null;
-	}
-	
-	
-	
-	/**
 	 * Palautetaan HTTP -metodin(GET, POST, PATCH, DELETE) käsittelyn hoitavan luokan referenssi hyödyntäen polymorfismia.
 	 * @param method Käytettävä HTTP -metodi(GET, POST, PATCH, DELETE).
 	 * @param url URL-osoite, minne pyyntö lähetään.
@@ -111,5 +63,49 @@ public class Connection {
 		}
 		
 		return null;
+	}
+	
+	
+	/**
+	 * Lukee vastauksen sisällön.
+	 * @param response Palvelimen vastaus lähetettyyn pyyntöön.
+	 * @return Vastauksen sisältö(body, ei headereita) String muodossa.
+	 */
+	protected ArrayList<String> readResponse(CloseableHttpResponse response) {
+		ArrayList<String> responseContent = new ArrayList<String>();
+		responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
+		responseContent.add(response.getStatusLine().getReasonPhrase());
+	
+		HttpEntity entity = response.getEntity();
+		
+		String line = "";
+		String str = "";
+		
+	    if (entity != null) {
+	    	//Käsitellään vastauksen sisältö rivi kerrallaan
+	        try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+	        	while ((line = br.readLine()) != null) {
+	        		str = str.concat(line + "\n");
+				}
+	        	System.out.println(str);
+	        	response.close();
+	        	responseContent.add(str);
+	        	return responseContent;
+	        } 
+	        catch(IOException e) { 	
+	        	System.out.println("Vastausta ei pystytty lukemaan.");
+	        }
+	        finally {
+	        	if(response != null) {
+	        		try {
+	        			response.close();
+	        		} 
+	        		catch (IOException e) {
+	        			e.printStackTrace();
+	        		}
+	        	}
+	        }
+	    }
+	    return null;
 	}
 }

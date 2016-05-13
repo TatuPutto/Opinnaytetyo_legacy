@@ -1,6 +1,6 @@
 package tatuputto.opinnaytetyo.gists;
 
-import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.GetGistFilesJSON;
 
@@ -19,30 +19,35 @@ public class GetSingleGistAJAX extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		GetGistFilesJSON files = new GetGistFilesJSON();
-		AuthorizedConnection AuthConnection = new AuthorizedConnection();
+		AuthorizedConnectionOauth AuthConnection = new AuthorizedConnectionOauth();
 		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
-		
-		String gistId = request.getParameter("id");
-		String url = "https://api.github.com/gists/" + gistId;
-		String accessToken = (String)request.getAttribute("accessToken");
-		
 		ArrayList<String> responseContent;
-		Gist gist;
+		String gistId = request.getParameter("id");
 		
-		//Jos accesstoken löytyy voidaan hakea julkisia ja salaisia gistejä
-		if(accessToken != null && !accessToken.isEmpty()) {
-			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
+		
+		if(!gistId.equals(null) || !gistId.equals("")) {
+			String url = "https://api.github.com/gists/" + gistId;
+			String accessToken = (String)request.getAttribute("accessToken");
+			
+			//Jos accesstoken löytyy voidaan hakea julkisia ja salaisia gistejä
+			if(accessToken != null && !accessToken.isEmpty()) {
+				responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
+			}
+			//Jos accesstokenia ei löydy voidaan hakea vain julkisia
+			else {
+				responseContent = UnauthConnection.formConnection("GET", url, "");
+			}
+			
+			String data = files.GetGistFiles(responseContent.get(2)).toString();
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(data);
+			
 		}
-		//Jos accesstokenia ei löydy voidaan hakea vain julkisia
 		else {
-			responseContent = UnauthConnection.formConnection("GET", url, "");
-		}
-		
-		
-		String data = files.GetGistFiles(responseContent.get(2)).toString();
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(data);
+			response.setContentType("application/text");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write("Gistiä ei pystytty hakemaan.");	
+		}		
 	}
-
 }

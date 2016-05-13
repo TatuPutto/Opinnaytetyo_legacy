@@ -20,10 +20,16 @@ ShowGistFiles.prototype.getGistFiles = function() {
 	var gistId = this.id;
 	var data = {id : gistId};
 	
-	$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
-		addUtilityButtons(gistId);
-		handleResponse(response);
-	});
+	if(gistId) {
+		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
+			console.log(response);
+			addUtilityButtons(gistId);
+			handleResponse(response);			
+		});
+	}
+	else {
+		$("#loading").hide();
+	}
 }
 
 //Puretaan tiedostojen sisältö ACE-editoreihin.

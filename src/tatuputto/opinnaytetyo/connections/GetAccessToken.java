@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * OAuth-prosessin viimeinen osa, vaihdetaan koodi käyttäjäkohtaiseen Access tokeniin.
@@ -21,9 +22,9 @@ public class GetAccessToken extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	//Sovellukselle rekisteröidyt avaimet
-	private static final String clientId = "566fea61a0cebae27268";
-    private static final String clientSecret = "87454f258250d9170e31a8f13b51e6a612bd6545";
-  
+	protected static final String clientId = "566fea61a0cebae27268";
+	protected static final String clientSecret = "87454f258250d9170e31a8f13b51e6a612bd6545";
+	
     
     /**
      * 
@@ -48,11 +49,13 @@ public class GetAccessToken extends HttpServlet {
         String[] token = line.split("&");
         token = token[0].split("=");
         
-   		Cookie accessToken = new Cookie("accesstoken", token[1]);
-   		accessToken.setMaxAge(60*60*24*7); 
-   		response.addCookie(accessToken);
+   		Cookie accessTokenCookie = new Cookie("accesstoken", token[1]);
+   		accessTokenCookie.setMaxAge(60*60*24*7); 
+   		response.addCookie(accessTokenCookie);
    		
-   		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
+   		HttpSession session = request.getSession(true);
+		session.setAttribute("accessToken", token[1]);
    		
+   		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/")); 		
    	}
 }

@@ -1,6 +1,6 @@
 package tatuputto.opinnaytetyo.gists;
 
-import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.EncodeJSON;
 
@@ -20,7 +20,7 @@ public class CreateGist extends HttpServlet {
  
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		EncodeJSON encodejson = new EncodeJSON();
-		AuthorizedConnection connection = new AuthorizedConnection();
+		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
 		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
 		String description = request.getParameter("description");

@@ -17,15 +17,8 @@ import javax.servlet.http.HttpSession;
  */
 @WebFilter(filterName = "CheckSession", urlPatterns = ("/*"))
 public class CheckSession implements Filter {
-    public CheckSession() {
-    }
-
-	public void destroy() {
-	}
-
-	public void init(FilterConfig fConfig) throws ServletException {
-	}
-	
+	public void destroy() {}
+	public void init(FilterConfig fConfig) throws ServletException {}
 	
 	
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

@@ -3,6 +3,7 @@ var editors = [];
 
 $("document").ready(function() {
 	$("#content").css("height", ($(window).height() - 120));
+	$("#gistBase").hide();
 	$("#loading").show();
 	
 	//Haetaan ensimmäisen gistin tiedostot sivun latauksen valmistuttua

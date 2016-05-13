@@ -1,12 +1,20 @@
 
+body {
+	margin: 0px;
+}
+
 #header {
 	 background-color: lightblue;
 	 height: 50px;
 }
 
+#navmenu {
+	float: right;
+	margin-right: 10px;
+}
+
 ul#navmenu {
     padding: 0;
-    padding-top: 15px;
 }
 
 ul#navmenu li {

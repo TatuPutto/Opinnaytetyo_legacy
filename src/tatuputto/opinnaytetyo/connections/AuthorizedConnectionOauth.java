@@ -10,12 +10,12 @@ import org.apache.http.impl.client.HttpClients;
 
 /**
  * Muodostaa yhteyden palvelimeen API:n ja Apachen HTTP Clientin avulla.
- * Toteuttaa APIConnection rajapintaluokan.
+ * 
  */
-public class AuthorizedConnection extends Connection {
+public class AuthorizedConnectionOauth extends Connection {
 	
 	/**
-	 * Muodostaa yhteyden palvelimeen, lisää pyyntöön Authorization headerin.
+	 * Muodostaa yhteyden palvelimeen, lisää pyyntöön Authorization headerin(Oauth).
 	 * @param method Käytettävä HTTP -metodi(GET, POST, PATCH, DELETE).
 	 * @param url URL-osoite, minne pyyntö lähetään.
 	 * @param data Pyynnön mukana lähetettävä data.
@@ -29,15 +29,11 @@ public class AuthorizedConnection extends Connection {
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 
 			//Muodostetaan ja lisätään auktorisointi header pyyntöön
-	    	//accessToken = "ab3c91435e4fadb492e9c570ee58959a514b6c86";
-		    String authString = "token " + accessToken;
-		    httpMethod.addHeader("Authorization", authString);
+		    String authInfo = "token " + accessToken;
+		    httpMethod.addHeader("Authorization", authInfo);
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
 			
 			return readResponse(response);
-			
-			
-			
 			
 		//TODO Tarkemmat poikkeustilanteet
 		}

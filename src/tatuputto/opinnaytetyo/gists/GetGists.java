@@ -1,6 +1,6 @@
 package tatuputto.opinnaytetyo.gists;
 
-import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.ParseMultipleGistsJSON;
 import tatuputto.opinnaytetyo.gists.Gist;
@@ -24,7 +24,7 @@ public class GetGists extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ParseMultipleGistsJSON parse = new ParseMultipleGistsJSON();
-		AuthorizedConnection AuthConnection = new AuthorizedConnection();
+		AuthorizedConnectionOauth AuthConnection = new AuthorizedConnectionOauth();
 		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
 		ArrayList<String> responseContent;
@@ -34,15 +34,15 @@ public class GetGists extends HttpServlet {
 		String accessToken = (String)request.getAttribute("accessToken");
 		
 		//Jos accesstoken löytyy muodostetaan yhteys auktorisoituna käyttäjänä -> haetaan käyttäjän gistit(julkiset ja salaiset)
-		//if(accessToken != null && !accessToken.isEmpty()) {
+		if(accessToken != null && !accessToken.isEmpty()) {
 			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
 			gists = parse.parseJSON(responseContent.get(2));
-		//}
+		}
 		//Jos accesstokenia ei löytdy muodostetaan yhteys anonyyminä -> haetaan muiden käyttäjien julkisia gistejä
-		/*else {
+		else {
 			responseContent = UnauthConnection.formConnection("GET", url, "");
 			gists = parse.parseJSON(responseContent.get(2));
-		}*/
+		}
 			
 			
 		request.setAttribute("gists", gists);

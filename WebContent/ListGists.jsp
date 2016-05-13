@@ -18,46 +18,47 @@
 <title>Gists</title>
 </head>
 <body>
-<%@ include file="Header.jsp" %>
-
-<div id="content">
-	<!-- Listataan gistit -->
-	<div id="listGists">
-
-		<% 
-		if (request.getAttribute("gists") != null) {
-			ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
-
-			for (int i = 0; i < gistList.size(); i++) { 
-				%>
-				<div class="singleGist" id="<%=gistList.get(i).getId()%>"
-				  data-rawurl="<%=gistList.get(i).getFiles().get(0).getRawUrl()%>">
-					<p><%=gistList.get(i).getFiles().get(0).getFilename()%></p>
-					<p><%=gistList.get(i).getDescription()%></p>
-				</div>
-				<%
+<div class="container">
+	<%@ include file="Header.jsp" %>
+	
+	<div id="content">
+		<!-- Listataan gistit -->
+		<div id="listGists">
+		
+			<% 
+			if (request.getAttribute("gists") != null) {
+				ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
+	
+				for (int i = 0; i < gistList.size(); i++) { 
+					%>
+					<div class="singleGist">
+					
+		
+						<p><%=gistList.get(i).getDescription()%></p>
+					</div>
+					<%
+				}
+			} 
+			else {
+				out.println("Gistejä ei löytynyt");
 			}
-		} 
-		else {
-			out.println("Gistejä ei löytynyt");
-		}
-		%>
-	</div>
-
-	
-	
-	
-	<!-- Yksittäisen gistin tiedostot -->
-	<div id="gistFiles"><br>
-		<div id="gistBase">
-			<div class="gistInfo">
-				<input type="text" class="filename" value=""></input>
-			</div>
-			<div id="editor"></div>
+			%>
 		</div>
-		<div id="loading"></div>
+	
+		
+		
+		
+		<!-- Yksittäisen gistin tiedostot -->
+		<div id="gistFiles"><br>
+			<div id="gistBase">
+				<div class="gistInfo">
+					<input type="text" class="filename" value=""></input>
+				</div>
+				<div id="editor"></div>
+			</div>
+			<div id="loading"></div>
+		</div>
 	</div>
 </div>
-
 </body>
 </html>

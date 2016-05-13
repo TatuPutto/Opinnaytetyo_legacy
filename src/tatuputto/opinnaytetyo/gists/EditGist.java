@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.json.EncodeJSON;
 
 
@@ -24,7 +24,7 @@ public class EditGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthorizedConnection connection = new AuthorizedConnection();
+		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
 		EncodeJSON encodejson = new EncodeJSON();
 		
 		String accessToken = "f08ced82cc79020c2e3e992516421db6557e0f64";

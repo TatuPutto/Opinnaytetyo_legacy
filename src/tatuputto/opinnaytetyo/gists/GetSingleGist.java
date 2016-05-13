@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 
@@ -22,7 +22,7 @@ public class GetSingleGist extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ParseSingleGistJSON parse = new ParseSingleGistJSON();
-		AuthorizedConnection AuthConnection = new AuthorizedConnection();
+		AuthorizedConnectionOauth AuthConnection = new AuthorizedConnectionOauth();
 		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
 		String gistId = request.getParameter("id");

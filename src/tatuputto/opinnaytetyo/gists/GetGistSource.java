@@ -1,6 +1,6 @@
 package tatuputto.opinnaytetyo.gists;
 
-import tatuputto.opinnaytetyo.connections.AuthorizedConnection;
+import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class GetGistSource extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthorizedConnection connection = new AuthorizedConnection();
+		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
 		
 		String rawUrl = request.getParameter("rawurl");
 		
