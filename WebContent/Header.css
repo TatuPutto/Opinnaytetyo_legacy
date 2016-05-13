@@ -1,0 +1,27 @@
+#header {
+	 background-color: lightblue;
+	 height: 50px;
+}
+
+#navmenu {
+	float: right;
+	margin-right: 10px;
+}
+
+ul#navmenu {
+    padding: 0;
+}
+
+ul#navmenu li {
+    display: inline;
+}
+
+ul#navmenu li a {
+    padding: 10px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+ul#navmenu li a:hover {
+    background-color: white;
+}

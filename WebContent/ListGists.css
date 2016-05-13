@@ -1,0 +1,98 @@
+body {
+	margin: 0px;
+}
+
+a {
+	font-size: 16px;
+}
+
+.content {
+	width: 90%;
+	margin-top: 50px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+/*Vasen content - gistien listaus*/
+.contentLeft {
+	float: left;
+	width: 35%;
+}
+
+.listGists {
+	height: 90%;
+	overflow-y: scroll;
+}
+
+.singleGist {
+	cursor: pointer;
+	border-style: solid;
+	border-width: 1px;
+	word-break: keep-all;
+}
+
+.selected {
+	background-color: white;
+}
+
+
+
+/*Oikea content - yksittainen gist*/
+.contentRight {
+	background-color: lightblue;
+	width: 65%;
+	margin-left: 35%;
+}
+
+.singleGistFiles {
+	height: 90%;
+	overflow-y: scroll;
+}
+
+.gistInfo {
+	height: 200px;
+}
+
+.fileInfo {
+	padding: 4px;
+}
+
+.gistFirstFile {
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 4px;
+	background-color: #e6e6e6;
+	padding-bottom: 4px;
+	margin-bottom: 20px;
+}
+
+.gistFile {
+	width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 4px;
+	background-color: #e6e6e6;
+	padding-bottom: 4px;
+	margin-bottom: 20px;
+}
+
+div[id^="editor"] {
+	width: 99%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 2px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.loading {
+	background: url(loading.gif) no-repeat center center;
+	height: 90%;
+	display: none;
+}

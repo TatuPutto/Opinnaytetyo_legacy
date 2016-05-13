@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="tatuputto.opinnaytetyo.gists.Gist" %>
 
@@ -8,11 +7,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
-<link href="styles.css " rel="stylesheet" type="text/css" />
+<!-- <link href="styles.css " rel="stylesheet" type="text/css" />-->
+
+<link href="ListGists.css " rel="stylesheet" type="text/css" />
+<link href="Header.css " rel="stylesheet" type="text/css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="ShowGistFiles.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript"></script>
 <script src="ListGistFiles.js" type="text/javascript"></script>
 
 <title>Gists</title>
@@ -20,43 +21,64 @@
 <body>
 <div class="container">
 	<%@ include file="Header.jsp" %>
+	<div class="content">
 	
-	<div id="content">
-		<!-- Listataan gistit -->
-		<div id="listGists">
-		
-			<% 
-			if (request.getAttribute("gists") != null) {
-				ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
-	
-				for (int i = 0; i < gistList.size(); i++) { 
-					%>
-					<div class="singleGist">
+		<div class="contentLeft">
+			<!-- Listataan gistit -->
+			<div class="listGists">
+				<td>accesstoken: </td>
+				<td><input type="text" value="<%= session.getAttribute("accessToken") %>" /></td>
+				<% 
+				if (request.getAttribute("gists") != null) {
+					ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
+					String id = "";
+					String description = "";
+					String name = "";
+					String rawUrl = "";
 					
-		
-						<p><%=gistList.get(i).getDescription()%></p>
-					</div>
-					<%
+					for (int i = 0; i < gistList.size(); i++) {
+						if(gistList.get(i).getFiles().size() > 0) {
+							id = gistList.get(i).getId();
+							description = gistList.get(i).getDescription();
+							name = gistList.get(i).getFiles().get(0).getFilename();
+							rawUrl = gistList.get(i).getFiles().get(0).getRawUrl();
+							
+							%>
+							<div class="singleGist" id="<%=id %>" data-rawurl="<%=rawUrl %>">
+								<p><%=name %></p>
+								<p><%=description %></p>
+							</div>
+							<%
+						}	
+					}
+				} 
+				else {
+					out.println("GistejÃ¤ ei lÃ¶ytynyt");
 				}
-			} 
-			else {
-				out.println("Gistejä ei löytynyt");
-			}
-			%>
-		</div>
-	
-		
-		
-		
-		<!-- Yksittäisen gistin tiedostot -->
-		<div id="gistFiles"><br>
-			<div id="gistBase">
-				<div class="gistInfo">
-					<input type="text" class="filename" value=""></input>
-				</div>
-				<div id="editor"></div>
+				%>
 			</div>
-			<div id="loading"></div>
+		</div>
+		
+		<div class="contentRight">
+			<!-- YksittÃ¤isen gistin tiedostot -->
+			<div class="singleGistFiles">
+				<!-- Gistin tiedot, nimi, kuvaus, tekijÃ¤ jne. -->
+				<div class="gistInfo">
+					<input type="button" id="editGist" value="Muokkaa"/>
+					<input type="button" id="deleteGist" value="Poista"/>
+				</div>
+				
+				<!-- YksittÃ¤inen tiedosto -->
+				<div class="gistFirstFile">
+					<div class="fileInfo">
+						<!-- <input type="text" class="filename" value=""></input>-->
+						<a class="filename" href=""/></a>
+					</div>
+					<!-- div-elementti, joka muutetaan ace-editoriksi -->
+					<div id="editor1"></div>
+				</div>
+			</div>
+			<div class="loading"></div>
 		</div>
 	</div>
 </div>

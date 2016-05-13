@@ -3,7 +3,7 @@ var editorNum = 1;
 
 //Alustetaan ensimmäinen editori, kun sivusto on ladattu
 $(document).ready(function() {
-	editor = ace.edit("editor");
+	editor = ace.edit("editor0");
 	editor.getSession().setMode("ace/mode/java");
 	editor.setOptions({minLines: 20});
 	editor.setOptions({maxLines: 60});
@@ -25,7 +25,7 @@ $(document).ready(function() {
 	});
 
 	//Poistetaan kenttä
-	$("#files").on("click", ".removeFile", function() {
+	$(".files").on("click", ".removeFile", function() {
 		$(this).closest("[class^=gistFile]").remove();
 	});
 });
@@ -38,14 +38,18 @@ function initiateGistCreation(isPublic) {
 	var data = {};
 	var sources = [];
 	var filenames = [];
-	var description = $("#snippetDescription").val();
+	var description = $(".description").val();
 	var filenameFields = $(".filename");
 
+	
 	//Lisätään tiedostonimet ja lähdekoodit taulukoihin.
-	for(var j = 0; j < editors.length; j++) {
-		if(filenameFields[j].value != "") {
-			filenames.push(filenameFields[j].value);
-			sources.push(editors[j].getValue());
+	for(var j = 0; j < filenameFields.length; j++) {
+		if($(filenameFields[j]).val() != "") {
+			var getValueFrom = $(filenameFields[j]).closest("[class^=gistFile]").attr("class");
+			getValueFrom = getValueFrom.substring(getValueFrom.length - 1);
+	
+			filenames.push($(filenameFields[j]).val());
+			sources.push(editors[getValueFrom].getValue());
 		}
 		else {
 			alert("Tiedostonimi ei voi olla tyhjä.");
@@ -53,22 +57,21 @@ function initiateGistCreation(isPublic) {
 		}
 	}
 
-	
-	
 	//Koostetaan kerätty data olioon.
 	data = {description : description, ispublic : isPublic, filenames: filenames, sources : sources};
-
+	console.log(data);
 	//AJAX-kutsu Gistin luontimetodiin.
 	$.post("http://localhost:8080/Opinnaytetyo/CreateGist", data, function(response) {
 		alert(response);
-		window.location = "http://localhost:8080/Opinnaytetyo/";
+		//window.location = "http://localhost:8080/Opinnaytetyo/";
 	});
 }
 
+
 //Lisätään kenttä uudelle tiedostolle.
 function addFile() {
-	$("#files").append("<div class=\"gistFile" + editorNum + "\">" +
-			"<div class=\"gistInfo\">" +
+	$(".files").append("<div class=\"gistFile" + editorNum +  "\">" +
+			"<div class=\"fileInfo\">" +
 			"<input type=\"text\" class=\"filename\" placeholder=\"Tiedostonimi, esim. File.java\"/>" + 
 			"<input type=\"button\" class=\"removeFile\" value=\"Poista\" style=\"margin-left: 4px;\"/>" +
 			"</div>" +

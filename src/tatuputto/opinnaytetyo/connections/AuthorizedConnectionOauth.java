@@ -3,6 +3,7 @@ package tatuputto.opinnaytetyo.connections;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -15,32 +16,40 @@ import org.apache.http.impl.client.HttpClients;
 public class AuthorizedConnectionOauth extends Connection {
 	
 	/**
-	 * Muodostaa yhteyden palvelimeen, lisää pyyntöön Authorization headerin(Oauth).
-	 * @param method Käytettävä HTTP -metodi(GET, POST, PATCH, DELETE).
-	 * @param url URL-osoite, minne pyyntö lähetään.
-	 * @param data Pyynnön mukana lähetettävä data.
-	 * @param accessToken Käyttäjäkohtainen avain, jonka avulla voidaan tehda muutoksia käyttäjän gisteihin API:n välityksellä.
-	 * @return Palauttaa vastauksen sisällön String muodossa.
+	 * Muodostaa yhteyden palvelimeen, lisï¿½ï¿½ pyyntï¿½ï¿½n Authorization headerin(Oauth).
+	 * @param method Kï¿½ytettï¿½vï¿½ HTTP -metodi(GET, POST, PATCH, DELETE).
+	 * @param url URL-osoite, minne pyyntï¿½ lï¿½hetï¿½ï¿½n.
+	 * @param data Pyynnï¿½n mukana lï¿½hetettï¿½vï¿½ data.
+	 * @param accessToken Kï¿½yttï¿½jï¿½kohtainen avain, jonka avulla voidaan tehda muutoksia kï¿½yttï¿½jï¿½n gisteihin API:n vï¿½lityksellï¿½.
+	 * @return Palauttaa vastauksen sisï¿½llï¿½n String muodossa.
 	 */
 	public ArrayList<String> formConnection(String method, String url, String data, String accessToken) {
+		ArrayList<String> responseContent = new ArrayList<String>();
 		//Avataan yhteys ja lisataan mukaan auktorisointi header
 		try {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 
-			//Muodostetaan ja lisätään auktorisointi header pyyntöön
+			//Muodostetaan ja lisï¿½tï¿½ï¿½n auktorisointi header pyyntï¿½ï¿½n
 		    String authInfo = "token " + accessToken;
 		    httpMethod.addHeader("Authorization", authInfo);
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
 			
-			return readResponse(response);
+			responseContent = readResponse(response);
+			
+			if(response != null) {
+				response.close();
+			}
+		
+			return responseContent;
 			
 		//TODO Tarkemmat poikkeustilanteet
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Yhteyttä ei voitu muodostaa.");
+			System.out.println("Yhteyttï¿½ ei voitu muodostaa.");
 		}
+		
 	
 		return null;
 	}

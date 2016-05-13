@@ -19,14 +19,14 @@ public class ParseMultipleGistsJSON {
 			//Muodostetaan vastauksena saadusta String muotoisesta JSONinsta, JSON taulukko
 			JSONArray jArray = new JSONArray(JSONresponse);
 
-			//Käydään muodostettu JSON taulukko olio kerrallaan läpi
+			//Kï¿½ydï¿½ï¿½n muodostettu JSON taulukko olio kerrallaan lï¿½pi
 			for (int i = 0; i < jArray.length(); i++) {
-				//Muodostetaan jokaisesta taulukon indeksistä JSON olio
+				//Muodostetaan jokaisesta taulukon indeksistï¿½ JSON olio
 				JSONObject jObject = jArray.getJSONObject(i); 
 			
 				String gistId = jObject.getString("id");
 				String description = jObject.getString("description"); 
-				//Etsitään avain, joka sisältää gistin tiedostot
+				//Etsitï¿½ï¿½n avain, joka sisï¿½ltï¿½ï¿½ gistin tiedostot
 				JSONObject files = jObject.getJSONObject("files"); 
 				
 				gists.add(new Gist(gistId, description, parseNestedObjects(files)));
@@ -47,7 +47,7 @@ public class ParseMultipleGistsJSON {
 	        String key = (String)iterator.next();
 
 	        try {
-	            //Etsitään sisennetystä oliosta koodileikkeen näyttämiseen tarvittavat tiedot
+	            //Etsitï¿½ï¿½n sisennetystï¿½ oliosta koodileikkeen nï¿½yttï¿½miseen tarvittavat tiedot
 	        	JSONObject singleFile = (JSONObject)files.get(key);
 	            String filename = singleFile.getString("filename");
 	            String language = singleFile.getString("language");

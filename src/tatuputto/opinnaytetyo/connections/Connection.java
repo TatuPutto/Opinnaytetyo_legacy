@@ -17,12 +17,12 @@ import org.apache.http.entity.StringEntity;
 
 public class Connection {
 	/**
-	 * Palautetaan HTTP -metodin(GET, POST, PATCH, DELETE) käsittelyn hoitavan luokan referenssi hyödyntäen polymorfismia.
-	 * @param method Käytettävä HTTP -metodi(GET, POST, PATCH, DELETE).
-	 * @param url URL-osoite, minne pyyntö lähetään.
-	 * @param data Pyynnön mukana lähetettävä data.
-	 * @param accessToken Käyttäjäkohtainen avain, jonka avulla voidaan tehda muutoksia käyttäjän gisteihin API:n välityksellä.
-	 * @return Referenssi HTTP -metodin käsittelevään luokkaan(HttpGet, HttpPost, HttpPatch, HttpDelete).
+	 * Palautetaan HTTP -metodin(GET, POST, PATCH, DELETE) kï¿½sittelyn hoitavan luokan referenssi hyï¿½dyntï¿½en polymorfismia.
+	 * @param method Kï¿½ytettï¿½vï¿½ HTTP -metodi(GET, POST, PATCH, DELETE).
+	 * @param url URL-osoite, minne pyyntï¿½ lï¿½hetï¿½ï¿½n.
+	 * @param data Pyynnï¿½n mukana lï¿½hetettï¿½vï¿½ data.
+	 * @param accessToken Kï¿½yttï¿½jï¿½kohtainen avain, jonka avulla voidaan tehda muutoksia kï¿½yttï¿½jï¿½n gisteihin API:n vï¿½lityksellï¿½.
+	 * @return Referenssi HTTP -metodin kï¿½sittelevï¿½ï¿½n luokkaan(HttpGet, HttpPost, HttpPatch, HttpDelete).
 	 */
 	protected HttpRequestBase setHTTPMethod(String method, String url, String data) {
 		if(method.equals("GET")) {
@@ -67,9 +67,9 @@ public class Connection {
 	
 	
 	/**
-	 * Lukee vastauksen sisällön.
-	 * @param response Palvelimen vastaus lähetettyyn pyyntöön.
-	 * @return Vastauksen sisältö(body, ei headereita) String muodossa.
+	 * Lukee vastauksen sisï¿½llï¿½n.
+	 * @param response Palvelimen vastaus lï¿½hetettyyn pyyntï¿½ï¿½n.
+	 * @return Vastauksen sisï¿½ltï¿½(body, ei headereita) String muodossa.
 	 */
 	protected ArrayList<String> readResponse(CloseableHttpResponse response) {
 		ArrayList<String> responseContent = new ArrayList<String>();
@@ -82,18 +82,18 @@ public class Connection {
 		String str = "";
 		
 	    if (entity != null) {
-	    	//Käsitellään vastauksen sisältö rivi kerrallaan
+	    	//Kï¿½sitellï¿½ï¿½n vastauksen sisï¿½ltï¿½ rivi kerrallaan
 	        try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
 	        	while ((line = br.readLine()) != null) {
 	        		str = str.concat(line + "\n");
 				}
-	        	System.out.println(str);
+	        	//System.out.println(str);
 	        	response.close();
 	        	responseContent.add(str);
 	        	return responseContent;
 	        } 
 	        catch(IOException e) { 	
-	        	System.out.println("Vastausta ei pystytty lukemaan.");
+	        	//System.out.println("Vastausta ei pystytty lukemaan.");
 	        }
 	        finally {
 	        	if(response != null) {
