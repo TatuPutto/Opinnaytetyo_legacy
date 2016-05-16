@@ -43,7 +43,7 @@ $("document").ready(function() {
 			window.location.href = url;
 		}
 	});
-
+	
 });
 
 
@@ -78,9 +78,11 @@ function handleResponse(response) {
 		
 		//Lisätään ensimmäisen tiedoston koodi jo olemassa olevaan editoriin.
 		if(i === 0) {
-			$(".filename").first().val(filename);
+			$(".gistFirstFile a").text(filename);
 			editor = ace.edit("editor1");
+			editor.setTheme("ace/theme/cobalt");
 			editor.getSession().setMode("ace/mode/java");
+			editor.setOption("showPrintMargin", false)
 			editor.setOptions({ maxLines: amountOfLines });
 			editor.setValue(fileContent);
 			editor.setReadOnly(true);
@@ -120,7 +122,9 @@ function createEditor(filename, fileContent, amountOfLines) {
 	var makeEditorOf = "editor" + fileNum;
 	editors.push(ace.edit(makeEditorOf));
 	
+	editors[editors.length - 1].setTheme("ace/theme/cobalt");
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
+	editors[editors.length - 1].setOption("showPrintMargin", false)
 	editors[editors.length - 1].setOptions({ maxLines: amountOfLines });
 	editors[editors.length - 1].setValue(fileContent);
 	editors[editors.length - 1].setReadOnly(true);
@@ -137,6 +141,4 @@ function resetFields() {
 	
 	$(".singleGistFiles").find(".gistFile").remove();
 }
-
-
 

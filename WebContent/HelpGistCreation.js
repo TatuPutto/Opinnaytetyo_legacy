@@ -60,6 +60,7 @@ function initiateGistCreation(isPublic) {
 	//Koostetaan kerätty data olioon.
 	data = {description : description, ispublic : isPublic, filenames: filenames, sources : sources};
 	console.log(data);
+	
 	//AJAX-kutsu Gistin luontimetodiin.
 	$.post("http://localhost:8080/Opinnaytetyo/CreateGist", data, function(response) {
 		alert(response);

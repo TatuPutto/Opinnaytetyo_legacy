@@ -35,11 +35,13 @@ public class EncodeJSON {
 				files.put(filenames[i], file);	
 			}
 
-			//System.out.println(nested);
 			requestJSON.put("files", files);
-			System.out.print(requestJSON);
+			//System.out.print(requestJSON);
 
-			return requestJSON;
+			
+			
+			
+			return replaceSpecialCharacters(requestJSON);
 		}
 		catch(JSONException e) {
 			e.printStackTrace();
@@ -83,6 +85,25 @@ public class EncodeJSON {
 		}
 
 		return null;	
+	}
+	
+	
+	private JSONObject replaceSpecialCharacters(JSONObject obj) {
+		String objStr = obj.toString().replace("ä", "\u00E4").replace("ö", "\u00F6");
+		//objStr.replace("ä", "U+00E4");
+		//objStr.replace("ö", "U+00F6");
+		System.out.println(objStr);
+		
+		try {
+			JSONObject jsonObj = new JSONObject(objStr);
+			return jsonObj;
+		} 
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return null;
 	}
 	
 }

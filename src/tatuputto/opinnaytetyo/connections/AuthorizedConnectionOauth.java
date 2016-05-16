@@ -1,6 +1,9 @@
 package tatuputto.opinnaytetyo.connections;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
@@ -35,12 +38,42 @@ public class AuthorizedConnectionOauth extends Connection {
 		    httpMethod.addHeader("Authorization", authInfo);
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
 			
-			responseContent = readResponse(response);
-			
-			if(response != null) {
-				response.close();
+			HttpEntity entity = response.getEntity();
+
+			String line = "";
+			String str = "";
+			if (entity != null) {
+				//K�sitell��n vastauksen sis�lt� rivi kerrallaan
+			    try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+			    	while ((line = br.readLine()) != null) {
+			    		str = str.concat(line + "\n");
+					}
+			    	//System.out.println(str);
+			    	//Lisätään vastaukoodi ja entityn sisältö taulukkoon
+			    	responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
+					responseContent.add(response.getStatusLine().getReasonPhrase());
+			    	responseContent.add(str);
+			    	
+			    	response.close();
+			    } 
+			    catch(IOException e) { 	
+			    	//System.out.println("Vastausta ei pystytty lukemaan.");
+			    	e.printStackTrace();
+			    	httpMethod.abort();
+			    }
+			    finally {
+			    	if(response != null) {
+			    		try {
+			    			response.close();
+			    		} 
+			    		catch (IOException e) {
+			    			e.printStackTrace();
+			    		}
+			    	}
+			    }
 			}
-		
+			
+			
 			return responseContent;
 			
 		//TODO Tarkemmat poikkeustilanteet

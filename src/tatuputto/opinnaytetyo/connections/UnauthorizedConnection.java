@@ -1,7 +1,11 @@
 package tatuputto.opinnaytetyo.connections;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -9,28 +13,63 @@ import org.apache.http.impl.client.HttpClients;
 
 public class UnauthorizedConnection extends Connection {
 	/**
-	 * Muodostaa yhteyden palvelimeen ei auktorisoituna käyttäjänä.
-	 * @param method Käytettävä HTTP -metodi(GET, POST, PATCH, DELETE).
-	 * @param url URL-osoite, minne pyyntö lähetään.
-	 * @param data Pyynnön mukana lähetettävä data.
-	 * @param accessToken Käyttäjäkohtainen avain, jonka avulla voidaan tehda muutoksia käyttäjän gisteihin API:n välityksellä.
-	 * @return Palauttaa vastauksen sisällön String muodossa.
+	 * Muodostaa yhteyden palvelimeen ei auktorisoituna kï¿½yttï¿½jï¿½nï¿½.
+	 * @param method Kï¿½ytettï¿½vï¿½ HTTP -metodi(GET, POST, PATCH, DELETE).
+	 * @param url URL-osoite, minne pyyntï¿½ lï¿½hetï¿½ï¿½n.
+	 * @param data Pyynnï¿½n mukana lï¿½hetettï¿½vï¿½ data.
+	 * @param accessToken Kï¿½yttï¿½jï¿½kohtainen avain, jonka avulla voidaan tehda muutoksia kï¿½yttï¿½jï¿½n gisteihin API:n vï¿½lityksellï¿½.
+	 * @return Palauttaa vastauksen sisï¿½llï¿½n String muodossa.
 	 */
 	public ArrayList<String> formConnection(String method, String url, String data) {
+		ArrayList<String> responseContent = new ArrayList<String>();
 		//Muodostetaan yhteys
 		try {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
 			
-			//Palautetaan vastaus
-			return readResponse(response);
+			HttpEntity entity = response.getEntity();
+
+			String line = "";
+			String str = "";
+			if (entity != null) {
+				//Kï¿½sitellï¿½ï¿½n vastauksen sisï¿½ltï¿½ rivi kerrallaan
+			    try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+			    	while ((line = br.readLine()) != null) {
+			    		str = str.concat(line + "\n");
+					}
+			    	//System.out.println(str);
+			    	//LisÃ¤tÃ¤Ã¤n vastaukoodi ja entityn sisÃ¤ltÃ¶ taulukkoon
+			    	responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
+					responseContent.add(response.getStatusLine().getReasonPhrase());
+			    	responseContent.add(str);
+			    	
+			    	response.close();
+			    } 
+			    catch(IOException e) { 	
+			    	//System.out.println("Vastausta ei pystytty lukemaan.");
+			    	e.printStackTrace();
+			    	httpMethod.abort();
+			    }
+			    finally {
+			    	if(response != null) {
+			    		try {
+			    			response.close();
+			    		} 
+			    		catch (IOException e) {
+			    			e.printStackTrace();
+			    		}
+			    	}
+			    }
+			}
+			
+			return responseContent;
 			
 		//TODO Tarkemmat poikkeustilanteet
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Yhteyttä ei voitu muodostaa.");
+			System.out.println("Yhteyttï¿½ ei voitu muodostaa.");
 		}
 	
 		return null;

@@ -4,6 +4,12 @@ body {
 
 a {
 	font-size: 16px;
+	font-family: 'Roboto', sans-serif;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 .content {
@@ -18,10 +24,11 @@ a {
 .contentLeft {
 	float: left;
 	width: 35%;
+	height: 900px;
 }
 
 .listGists {
-	height: 90%;
+	height: 100%;
 	overflow-y: scroll;
 }
 
@@ -33,30 +40,78 @@ a {
 }
 
 .selected {
-	background-color: white;
+	background-color: #21e054;
 }
 
 
 
 /*Oikea content - yksittainen gist*/
 .contentRight {
-	background-color: lightblue;
+	background-color: #D4DDE0;
 	width: 65%;
+	height: 900px;
 	margin-left: 35%;
 }
 
 .singleGistFiles {
-	height: 90%;
+	height: 100%;
 	overflow-y: scroll;
 }
 
 .gistInfo {
-	height: 200px;
+	height: 40px;	
 }
 
 .fileInfo {
 	padding: 4px;
 }
+
+
+#editGist {
+	float: right;
+    -webkit-border-radius: 4;
+    -moz-border-radius: 4;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+    font-size: 14px;
+    background: #21e054;
+    padding: 6px 12px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 6px;
+}
+
+#editGist:hover {
+  background: #0dbf3d;
+  text-decoration: none;
+}
+	
+
+#deleteGist {
+	float: right;
+    -webkit-border-radius: 4;
+    -moz-border-radius: 4;
+    border-radius: 4px;
+    font-family: 'Roboto', sans-serif;
+    color: #ffffff;
+    font-size: 14px;
+    background: #db4141;
+    padding: 6px 12px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 8px;
+}
+
+#deleteGist:hover {
+  background: #b30d0d;
+  text-decoration: none;
+}
+	
 
 .gistFirstFile {
     width: 98%;

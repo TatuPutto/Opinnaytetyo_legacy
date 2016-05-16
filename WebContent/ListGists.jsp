@@ -11,6 +11,7 @@
 
 <link href="ListGists.css " rel="stylesheet" type="text/css" />
 <link href="Header.css " rel="stylesheet" type="text/css" />
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript"></script>
@@ -31,6 +32,7 @@
 				<% 
 				if (request.getAttribute("gists") != null) {
 					ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
+					
 					String id = "";
 					String description = "";
 					String name = "";
@@ -64,8 +66,9 @@
 			<div class="singleGistFiles">
 				<!-- Gistin tiedot, nimi, kuvaus, tekijä jne. -->
 				<div class="gistInfo">
-					<input type="button" id="editGist" value="Muokkaa"/>
+					<a href=""></a>
 					<input type="button" id="deleteGist" value="Poista"/>
+					<input type="button" id="editGist" value="Muokkaa"/>
 				</div>
 				
 				<!-- Yksittäinen tiedosto -->

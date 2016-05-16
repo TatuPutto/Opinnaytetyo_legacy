@@ -32,12 +32,12 @@ public class GetSingleGist extends HttpServlet {
 		ArrayList<String> responseContent;
 		Gist gist;
 		
-		//Jos accesstoken löytyy voidaan hakea julkisia ja salaisia gistejä
+		//Jos accesstoken lï¿½ytyy voidaan hakea julkisia ja salaisia gistejï¿½
 		if(accessToken != null && !accessToken.isEmpty()) {
 			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
 			gist = parse.parseJSON(responseContent.get(2));
 		}
-		//Jos accesstokenia ei löydy voidaan hakea vain julkisia
+		//Jos accesstokenia ei lï¿½ydy voidaan hakea vain julkisia
 		else {
 			responseContent = UnauthConnection.formConnection("GET", url, "");
 			gist = parse.parseJSON(responseContent.get(2));
@@ -45,6 +45,7 @@ public class GetSingleGist extends HttpServlet {
 		
 		
 		request.setAttribute("gist", gist);
+		request.setAttribute("id", gistId);
 		RequestDispatcher rd = getServletContext().getRequestDispatcher("/EditGist.jsp");
 		rd.forward(request, response);
 	}

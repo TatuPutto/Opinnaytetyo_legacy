@@ -92,6 +92,7 @@ function removeFile(target) {
 
 function getFieldValues() {
 	var data = {};
+	var gistId = $("#gistId").text();
 	var description = $("#description").val();
 	var fname = document.getElementsByClassName("filename");
 
@@ -120,16 +121,15 @@ function getFieldValues() {
 		//Riippuen muutoksista, lisätään päivitetty tiedostonimi ja/tai koodi
 		//Jos tiedostoon ei ole tehty muutoksia ei lisätä mitään
 		if(nameChanged === true && contentChanged === true && filenameOnUpdate === "" && contentOnUpdate === "") {
-			filesToBeEdited[filenameOriginal] = {};
 		}
 		else if(nameChanged === true && contentChanged === true) {
-			filesToBeEdited[filenameOriginal] = {filename: filenameOnUpdate, content: contentOnUpdate};
+			filesToBeEdited[filenameUnmodified] = {filename: filenameOnUpdate, content: contentOnUpdate};
 		}
 		else if(nameChanged === true) {
-			filesToBeEdited[filenameOriginal] = {filename: filenameOnUpdate};
+			filesToBeEdited[filenameUnmodified] = {filename: filenameOnUpdate};
 		}
 		else if(contentChanged === true) {
-			filesToBeEdited[filenameOriginal] = {content: contentOnUpdate};
+			filesToBeEdited[filenameUnmodified] = {content: contentOnUpdate};
 		}
 			
 		i++;
@@ -143,23 +143,24 @@ function getFieldValues() {
 		filesToBeEdited[fname[i].value] = {filename: fname[i].value, content: editors[i].getValue()};
 	}
 	
-	
-	
+	//Muodostetaan lähetettävän datan sisältävä olio
+	data["id"] = gistId;
+	data["description"] = description;
+
 	if(Object.keys(filesToBeEdited).length > 0) {
-		data = {description: description, files: filesToBeEdited};
-	}
-	else {
-		data = {description: description};
+		data["files"] = filesToBeEdited;
+		//files =  {filesToBeEdited};
 	}
 	
 	console.log(JSON.stringify(data));
 		
 	
 	
-	/*$.post("http://localhost:8080/Opinnaytetyo/EditGist", JSON.stringify(data), function(response) {
+	$.post("http://localhost:8080/Opinnaytetyo/EditGist", JSON.stringify(data), function(response) {
 		alert(response);
-		window.location.href = "http://localhost:8080/Opinnaytetyo/";
-	}, "json");*/
+		//window.location.href = "http://localhost:8080/Opinnaytetyo/";
+	}, "json");
+	//});
 	
 
 	

@@ -17,40 +17,42 @@ import javax.servlet.http.HttpServletResponse;
 public class CreateGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
  
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		EncodeJSON encodejson = new EncodeJSON();
-		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
-		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+		String accessToken = (String)request.getAttribute("accessToken");
 		String description = request.getParameter("description");
 		Boolean isPublic =  Boolean.parseBoolean(request.getParameter("ispublic"));
 		String[] filenames = request.getParameterValues("filenames[]");
 		String[] sources = request.getParameterValues("sources[]");
 		
+		ArrayList<String> responseContent = sendPostData(accessToken, description, isPublic, filenames, sources);
+		
+		//LÃ¤hetetÃ¤Ã¤n vastauskoodi
+		response.setContentType("application/text");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));		
+	}
+
+	
+	private ArrayList<String> sendPostData(String accessToken, String description, Boolean isPublic, String[] filenames, String[] sources) {
+		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
+		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
+		EncodeJSON encode = new EncodeJSON();
+		
 		ArrayList<String> responseContent;
 		String url = "https://api.github.com/gists";
-		String accessToken = (String)request.getAttribute("accessToken");
 		
-		//Lähetetään gistille asetut tiedot muunnettavaksi JSON-muotoon
-		String data = encodejson.encodeJSONRequestPOST(description, isPublic, filenames, sources).toString();
+		//LÃ¤hetetÃ¤Ã¤n gistille asetut tiedot muunnettavaksi JSON-muotoon
+		String data = encode.encodeJSONRequestPOST(description, isPublic, filenames, sources).toString();
 		
-		//Jos accesstoken löytyy muodostetaan yhteys auktorisoituna käyttäjänä -> haetaan käyttäjän gistit(julkiset ja salaiset)
+		//Jos accesstoken lï¿½ytyy muodostetaan yhteys auktorisoituna kï¿½yttï¿½jï¿½nï¿½ -> haetaan kï¿½yttï¿½jï¿½n gistit(julkiset ja salaiset)
 		if(accessToken != null && !accessToken.isEmpty()) {
 			responseContent = connection.formConnection("POST", url, data, accessToken);
 		}
-		//Jos accesstokenia ei löytdy muodostetaan yhteys anonyyminä -> haetaan muiden käyttäjien julkisia gistejä
+		//Jos accesstokenia ei lÃ¶ydy muodostetaan yhteys anonyyminÃ¤-> haetaan muiden kï¿½yttï¿½jien julkisia gistejï¿½
 		else {
 			responseContent = UnauthConnection.formConnection("POST", url, data);
 		}
 		
-		
-		//Lähetetään pyynnön vastauskoodi
-		//lisäys onnistui: 201 - CREATED
-		//ei onnistunut: 401 - Unauthorized / 422 - Unprocessable Entity 
-		response.setContentType("application/text");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));
-		
+		return responseContent;
 	}
-
 }

@@ -22,9 +22,12 @@
 	<div id="files">
 
 		<% //data-content="<%=gist.getFiles().get(i).getContent()
-		if (request.getAttribute("gist") != null) {
+		if (request.getAttribute("gist") != null && request.getAttribute("id") != null) {
 			Gist gist = (Gist)request.getAttribute("gist");
+			String id = (String)request.getAttribute("id");
+			
 			%>
+			<p id="gistId"><%=id %></p>
 			<input type="text" id="description" value="<%=gist.getDescription() %>"></input><br><br>
 			<%
 			for (int i = 0; i < gist.getFiles().size(); i++) { 

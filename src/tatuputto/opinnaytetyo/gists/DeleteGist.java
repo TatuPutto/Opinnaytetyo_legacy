@@ -3,7 +3,6 @@ package tatuputto.opinnaytetyo.gists;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +27,7 @@ public class DeleteGist extends HttpServlet {
 			
 			ArrayList<String> responseContent = connection.formConnection("DELETE", url, "", accessToken);
 		
-			//TODO l‰het‰ vastauskoodit
+			//TODO l√§het√§ vastaukoodi
 		}
 		
 		

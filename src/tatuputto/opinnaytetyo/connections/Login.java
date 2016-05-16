@@ -25,7 +25,7 @@ public class Login extends HttpServlet {
 	    boolean validAuthorization = false;
 		
 	   
-	    //Tarkistetaan löytyykö accesstoken evästettä
+	    //Tarkistetaan lï¿½ytyykï¿½ accesstoken evï¿½stettï¿½
 	    if(cookies != null) {
 	    	for (int i = 0; i < cookies.length; i++) {
 	    		cookie = cookies[i];
@@ -42,28 +42,28 @@ public class Login extends HttpServlet {
 	    	if(!tokenCookieFound) {
 	    		response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");
 	    	}
-	    	//Jos eväste löytyi, tarkistetaan onko access token vielä voimassa
+	    	//Jos evï¿½ste lï¿½ytyi, tarkistetaan onko access token vielï¿½ voimassa
 	    	else {
 	    		validAuthorization = checkAuthorization(accessToken);	
 	    		
-	    		//Jos eväste on voimassa, aloitetaan sessio ja asetetaan evästeen arvo sessiomuuttujaksi
+	    		//Jos evï¿½ste on voimassa, aloitetaan sessio ja asetetaan evï¿½steen arvo sessiomuuttujaksi
 	    		if(validAuthorization) {
 	    			HttpSession session = request.getSession(true);
 	    			session.setAttribute("accessToken", accessToken);
 
 	    			response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
 	    		}
-	    		//Jos ei ole voimassa, poistetaan vanha eväste ja lähetetään käyttäjä tekemään uusi auktorisointi
+	    		//Jos ei ole voimassa, poistetaan vanha evï¿½ste ja lï¿½hetetï¿½ï¿½n kï¿½yttï¿½jï¿½ tekemï¿½ï¿½n uusi auktorisointi
 	    		else {
-	    			/*Cookie accessTokenCookie = new Cookie("accesstoken", "");
+	    			Cookie accessTokenCookie = new Cookie("accesstoken", "");
 	    			accessTokenCookie.setMaxAge(0); 
 	    	   		response.addCookie(accessTokenCookie);
 	    			
-	    			response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");*/
+	    			response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");
 	    		}
 	    	}    	
 	    }
-	    //Jos sessiota eikä evästettä löydy, lähetetään käyttäjä tunnistautumaan githubin välityksellä
+	    //Jos sessiota eikï¿½ evï¿½stettï¿½ lï¿½ydy, lï¿½hetetï¿½ï¿½n kï¿½yttï¿½jï¿½ tunnistautumaan githubin vï¿½lityksellï¿½
 	    //https://developer.github.com/v3/oauth/#web-application-flow
 	    else {
 	    	response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");
@@ -71,7 +71,7 @@ public class Login extends HttpServlet {
 	}
 	
 	
-	//Selvitään onko access token voimassa
+	//Selvitï¿½ï¿½n onko access token voimassa
 	private boolean checkAuthorization(String accessToken) {
 		AuthorizedConnectionBasic connection = new AuthorizedConnectionBasic();
 		String id = GetAccessToken.clientId;
@@ -81,7 +81,7 @@ public class Login extends HttpServlet {
 		ArrayList<String> responseContent = connection.formConnection("GET", url, "", id, secret);
 		
 		if(responseContent.get(0).equals("404")) {
-			log("Access token ei ole enää voimassa.");
+			log("Access token ei ole enï¿½ï¿½ voimassa.");
 			return false;
 		}
 		else {

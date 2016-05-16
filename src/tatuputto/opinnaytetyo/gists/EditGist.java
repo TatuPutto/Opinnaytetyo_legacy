@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.json.EncodeJSON;
+import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 
 
 @WebServlet("/EditGist")
@@ -24,41 +25,44 @@ public class EditGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
-		EncodeJSON encodejson = new EncodeJSON();
-		
-		String accessToken = "f08ced82cc79020c2e3e992516421db6557e0f64";
-		String url = "https://api.github.com/gists/f99404b40846ae22ca4b0df222bc5d7a";
-		
-		/*try {
-			
-			JSONObject jObj = new JSONObject(request.getParameter("files"));
-			
-			
-			log(""+jObj);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		String accessToken = (String)request.getAttribute("accessToken");
+	
+		//Luetaan pyynnön mukana lähettetty JSON
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String json = "";
+        String jsonData = "";
         if(br != null){
-            json = br.readLine();
+        	jsonData = br.readLine();
         }
-		
         
-        log(json);
-       ArrayList<String> responseContent = connection.formConnection("PATCH", url, json, accessToken);
-		
-		
-		//L�hetet��n pyynn�n vastauskoodi
-		//lis�ys onnistui: 201 - CREATED
-		//ei onnistunut: 401 - Unauthorized / 422 - Unprocessable Entity 
-		response.setContentType("application/text");
+        
+        ArrayList<String> responseContent = sendPatchData(response, accessToken, jsonData);
+       
+        response.setContentType("application/text");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));
+     
+	}
+	
+	
+	private ArrayList<String> sendPatchData(HttpServletResponse response, String accessToken, String jsonData) {
+		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
+		ParseSingleGistJSON parse = new ParseSingleGistJSON();
 		
+		String gistId = parse.parseJSON(jsonData).getId();
+		String url = "https://api.github.com/gists/" + gistId;
+		ArrayList<String> responseContent = new ArrayList<String>();
+		
+		//Jos access token löytyy, lähetetään muokkauspyyntö
+		if(accessToken != null && !accessToken.isEmpty()) {
+			responseContent = connection.formConnection("PATCH", url, jsonData, accessToken);
+		}
+		//Jos ei löydy, lähetetään vastauskoodi 401 - Unauthorized ja lopetetaan muokkausprosessi
+		else {
+			responseContent.add("401");
+			responseContent.add("Unauthorized");
+		}
+		
+		return responseContent;
 	}
 
 }
