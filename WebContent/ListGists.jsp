@@ -27,14 +27,15 @@
 		<div class="contentLeft">
 			<!-- Listataan gistit -->
 			<div class="listGists">
-				<td>accesstoken: </td>
-				<td><input type="text" value="<%= session.getAttribute("accessToken") %>" /></td>
+				
 				<% 
-				if (request.getAttribute("gists") != null) {
+				if(request.getAttribute("gists") != null) {
 					ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
 					
 					String id = "";
 					String description = "";
+					String owner = "";
+					String avatar = "";
 					String name = "";
 					String rawUrl = "";
 					
@@ -42,13 +43,15 @@
 						if(gistList.get(i).getFiles().size() > 0) {
 							id = gistList.get(i).getId();
 							description = gistList.get(i).getDescription();
+							owner = gistList.get(i).getOwner().getLogin();
+							avatar = gistList.get(i).getOwner().getAvatarUrl();
 							name = gistList.get(i).getFiles().get(0).getFilename();
 							rawUrl = gistList.get(i).getFiles().get(0).getRawUrl();
 							
 							%>
 							<div class="singleGist" id="<%=id %>" data-rawurl="<%=rawUrl %>">
-								<p><%=name %></p>
-								<p><%=description %></p>
+								<p><%=owner %> / <a href=""><%=name %></a></p>
+								<p class="descPara"><%=description %></p>
 							</div>
 							<%
 						}	
@@ -66,7 +69,7 @@
 			<div class="singleGistFiles">
 				<!-- Gistin tiedot, nimi, kuvaus, tekijä jne. -->
 				<div class="gistInfo">
-					<a href=""></a>
+					<a id="toGist" href=""></a>
 					<input type="button" id="deleteGist" value="Poista"/>
 					<input type="button" id="editGist" value="Muokkaa"/>
 				</div>

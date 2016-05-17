@@ -1,6 +1,8 @@
 <div id="header">
 	<!--<div class="logo"><img src="../logo.png"/></div>-->
 	
+	<p style="float: left"><%= session.getAttribute("accessToken") %></p>
+	
 	<ul id="navmenu">
 		<li><a href="GetGists">Listaa gistit</a></li>
 		<li><a href="CreateNewGist.jsp">Luo uusi Gist</a></li>

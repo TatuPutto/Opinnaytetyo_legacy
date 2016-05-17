@@ -5,12 +5,21 @@ import java.util.ArrayList;
 public class Gist {
 	private String id;
 	private String description;
+	private GistOwner owner;
 	private ArrayList<GistFile> files;
-	//TODO hae tarkemmat tiedot: omistaja, luonti/päivitys aika, lyhennetty yms.
+	//TODO hae tarkemmat tiedot: omistaja, luonti/pï¿½ivitys aika, lyhennetty yms.
+	
 	
 	public Gist(String id, String description, ArrayList<GistFile> files) {
 		this.id = id;
 		this.description = description;
+		this.files = files;
+	}
+	
+	public Gist(String id, String description, GistOwner owner, ArrayList<GistFile> files) {
+		this.id = id;
+		this.description = description;
+		this.owner = owner;
 		this.files = files;
 	}
 	
@@ -28,6 +37,14 @@ public class Gist {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public GistOwner getOwner() {
+		return owner;
+	}
+	public void setOwner(GistOwner owner) {
+		this.owner = owner;
+	}
+
 	public ArrayList<GistFile> getFiles() {
 		return files;
 	}

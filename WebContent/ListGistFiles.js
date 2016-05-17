@@ -69,6 +69,7 @@ function getGistFiles(gistId) {
 function handleResponse(response) {
 	var i = 0;
 	for(var file in response) {
+		var owner = response[file]["filename"];
 		var filename = response[file]["filename"];
 		var fileContent = response[file]["content"];
 		
@@ -78,6 +79,10 @@ function handleResponse(response) {
 		
 		//Lisätään ensimmäisen tiedoston koodi jo olemassa olevaan editoriin.
 		if(i === 0) {
+			//$(".gistInfo").append("<a href=\"\">" + filename + "</a>");
+			$("#toGist").attr("href", "");
+			$("#toGist").text("<Author> / " + filename);
+			
 			$(".gistFirstFile a").text(filename);
 			editor = ace.edit("editor1");
 			editor.setTheme("ace/theme/cobalt");

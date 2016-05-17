@@ -2,7 +2,6 @@ package tatuputto.opinnaytetyo.gists;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -12,11 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
-import tatuputto.opinnaytetyo.json.EncodeJSON;
 import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 
 

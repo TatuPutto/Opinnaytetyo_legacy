@@ -2,6 +2,7 @@ package tatuputto.opinnaytetyo.json;
 
 import tatuputto.opinnaytetyo.gists.Gist;
 import tatuputto.opinnaytetyo.gists.GistFile;
+import tatuputto.opinnaytetyo.gists.GistOwner;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 public class ParseMultipleGistsJSON {
 	
@@ -26,10 +28,14 @@ public class ParseMultipleGistsJSON {
 			
 				String gistId = jObject.getString("id");
 				String description = jObject.getString("description"); 
+				
+				JSONObject owner = jObject.getJSONObject("owner"); 
+				
 				//Etsit��n avain, joka sis�lt�� gistin tiedostot
 				JSONObject files = jObject.getJSONObject("files"); 
 				
-				gists.add(new Gist(gistId, description, parseNestedObjects(files)));
+				//luodaan uusi gist, jolle annetaan arvoksi id, kuvaus, sekä lista sen sisältämistä tiedostoista
+				gists.add(new Gist(gistId, description, parseGistOwnerInfo(owner), parseNestedObjects(files)));
 			}
 			
 			return gists;
@@ -37,6 +43,24 @@ public class ParseMultipleGistsJSON {
 		catch(JSONException e) {}
 		return null;
 	}
+	
+	
+	public GistOwner parseGistOwnerInfo(JSONObject ownerInfo) {
+		try {
+			String login = ownerInfo.getString("login");
+			String avatarUrl = ownerInfo.getString("avatar_url");
+			
+			GistOwner owner = new GistOwner(login, avatarUrl);  
+		    return owner;
+		}	
+		catch (JSONException e) {
+        	e.printStackTrace();
+        }
+		
+		return null;
+	}
+	
+	
 	
 	//Puretaan files-olio yksi sisennetty olio kerrallaan
 	public ArrayList<GistFile> parseNestedObjects(JSONObject files) {
@@ -52,7 +76,7 @@ public class ParseMultipleGistsJSON {
 	            String filename = singleFile.getString("filename");
 	            String language = singleFile.getString("language");
 	            String rawUrl = singleFile.getString("raw_url");
-	           // System.out.println(filename + ", " + language + ", " + rawUrl);
+	          
 	            gistFiles.add(new GistFile(filename, language, rawUrl));
 	            
 	        } catch (JSONException e) {}
