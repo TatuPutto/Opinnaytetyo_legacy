@@ -25,3 +25,21 @@ ul#navmenu li a {
 ul#navmenu li a:hover {
     background-color: white;
 }
+
+#userInfo {
+	float: left;
+	width: 200px;
+	height: 100%;
+	margin: 14px;
+}
+
+#userInfo img {
+	float: left;
+	width: 30px;
+	height: 30px; 
+	margin-top: -5px;
+}
+
+#userInfo p {
+	margin-left: 35px;
+}

@@ -30,6 +30,7 @@ public class CheckSession implements Filter {
 		if(req.getSession(false) != null) {
 			HttpSession session = req.getSession(false);
 			accessToken = (String)session.getAttribute("accessToken"); 
+			//req.setAttribute("authorizedUser", true);
 		}
 		
 		req.setAttribute("accessToken", accessToken);

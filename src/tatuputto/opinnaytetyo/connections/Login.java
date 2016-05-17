@@ -11,12 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import tatuputto.opinnaytetyo.gists.GistOwner;
+import tatuputto.opinnaytetyo.json.ParseAuthorizationInfo;
+
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ParseAuthorizationInfo parse = new ParseAuthorizationInfo();
+		
 		Cookie cookie = null;
 		Cookie[] cookies = null;
 	    cookies = request.getCookies();
@@ -44,17 +49,25 @@ public class Login extends HttpServlet {
 	    	}
 	    	//Jos ev�ste l�ytyi, tarkistetaan onko access token viel� voimassa
 	    	else {
-	    		validAuthorization = checkAuthorization(accessToken);	
+	    		ArrayList<String> responseContent = checkAuthorization(accessToken);	
 	    		
 	    		//Jos ev�ste on voimassa, aloitetaan sessio ja asetetaan ev�steen arvo sessiomuuttujaksi
-	    		if(validAuthorization) {
+	    		if(!responseContent.get(0).equals("404")) {
+	    			log("Access token on voimassa.");
+	    			
+	    			GistOwner user = parse.parseJSON(responseContent.get(2));
+	    			
 	    			HttpSession session = request.getSession(true);
+	    			session.setAttribute("username", user.getLogin());
+	    			session.setAttribute("avatar", user.getAvatarUrl());
 	    			session.setAttribute("accessToken", accessToken);
 
 	    			response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
 	    		}
 	    		//Jos ei ole voimassa, poistetaan vanha ev�ste ja l�hetet��n k�ytt�j� tekem��n uusi auktorisointi
 	    		else {
+	    			log("Access token ei ole enää voimassa.");
+	    			
 	    			Cookie accessTokenCookie = new Cookie("accesstoken", "");
 	    			accessTokenCookie.setMaxAge(0); 
 	    	   		response.addCookie(accessTokenCookie);
@@ -72,23 +85,15 @@ public class Login extends HttpServlet {
 	
 	
 	//Selvit��n onko access token voimassa
-	private boolean checkAuthorization(String accessToken) {
+	private ArrayList<String> checkAuthorization(String accessToken) {
 		AuthorizedConnectionBasic connection = new AuthorizedConnectionBasic();
+		
 		String id = GetAccessToken.clientId;
 		String secret = GetAccessToken.clientSecret;
 		String url = "https://api.github.com/applications/" + id + "/tokens/" + accessToken + "";
 		
-		ArrayList<String> responseContent = connection.formConnection("GET", url, "", id, secret);
-		
-		if(responseContent.get(0).equals("404")) {
-			log("Access token ei ole en�� voimassa.");
-			return false;
-		}
-		else {
-			log("Access token on voimassa.");
-			return true;
-		}
-		
-	}
+		return connection.formConnection("GET", url, "", id, secret);
 
+	}
+	
 }

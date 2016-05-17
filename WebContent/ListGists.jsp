@@ -5,17 +5,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <!-- <link href="styles.css " rel="stylesheet" type="text/css" />-->
 
-<link href="ListGists.css " rel="stylesheet" type="text/css" />
-<link href="Header.css " rel="stylesheet" type="text/css" />
+<link href="CSS/ListGists.css " rel="stylesheet" type="text/css" />
+<link href="CSS/Header.css " rel="stylesheet" type="text/css" />
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript"></script>
-<script src="ListGistFiles.js" type="text/javascript"></script>
+<script src="JS/ShowGistFiles.js" type="text/javascript"></script>
 
 <title>Gists</title>
 </head>
@@ -30,7 +30,8 @@
 				
 				<% 
 				if(request.getAttribute("gists") != null) {
-					ArrayList<Gist> gistList = (ArrayList) request.getAttribute("gists");
+					@SuppressWarnings("unchecked")
+					ArrayList<Gist> gistList = (ArrayList<Gist>)request.getAttribute("gists");
 					
 					String id = "";
 					String description = "";
@@ -50,7 +51,7 @@
 							
 							%>
 							<div class="singleGist" id="<%=id %>" data-rawurl="<%=rawUrl %>">
-								<p><%=owner %> / <a href=""><%=name %></a></p>
+								<p class="gistOwner"><%=owner %> / <a href=""><%=name %></a></p>
 								<p class="descPara"><%=description %></p>
 							</div>
 							<%
