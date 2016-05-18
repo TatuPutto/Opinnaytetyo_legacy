@@ -2,7 +2,7 @@ package tatuputto.opinnaytetyo.json;
 
 import tatuputto.opinnaytetyo.gists.Gist;
 import tatuputto.opinnaytetyo.gists.GistFile;
-import tatuputto.opinnaytetyo.gists.GistOwner;
+import tatuputto.opinnaytetyo.gists.User;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,12 +45,12 @@ public class ParseMultipleGistsJSON {
 	}
 	
 	
-	public GistOwner parseGistOwnerInfo(JSONObject ownerInfo) {
+	public User parseGistOwnerInfo(JSONObject ownerInfo) {
 		try {
 			String login = ownerInfo.getString("login");
 			String avatarUrl = ownerInfo.getString("avatar_url");
 			
-			GistOwner owner = new GistOwner(login, avatarUrl);  
+			User owner = new User(login, avatarUrl);  
 		    return owner;
 		}	
 		catch (JSONException e) {

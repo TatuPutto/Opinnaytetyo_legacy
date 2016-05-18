@@ -7,12 +7,12 @@ var editorNum = 0;
 $("document").ready(function() {
 	getUnmodifiedData();
 
-	$("#updateGist").click(function() {
+	$(".updateGist").click(function() {
 		getFieldValues();
 	});
 		
 	//Lisätään kenttä
-	$("#addFile").click(function() {
+	$(".addFile").click(function() {
 		addFile();
 	});
 	
@@ -21,7 +21,7 @@ $("document").ready(function() {
 		removeFile($(this));
 	});
 	
-	$("#files").on("click", ".removeFile", function() {
+	$(".content").on("click", ".removeFile", function() {
 		removeFile($(this));
 	});
 });
@@ -48,7 +48,10 @@ function getUnmodifiedData() {
 function createEditor(fields, content, amountOfLines) {
 	var makeEditorOf = "editor" + editorNum;
 	editors.push(ace.edit(makeEditorOf));
+	
+	editors[editors.length - 1].setTheme("ace/theme/cobalt");
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
+	editors[editors.length - 1].setOption("showPrintMargin", false);
 	editors[editors.length - 1].setOptions({ minLines :  20});
 	editors[editors.length - 1].setOptions({ maxLines :  40});
 	editors[editors.length - 1].setValue(content);
@@ -60,8 +63,8 @@ function createEditor(fields, content, amountOfLines) {
 
 //Lisätään kenttä uudelle tiedostolle.
 function addFile() {
-	$("#files").append("<div class=\"gistFile" + editorNum + "\">" +
-			"<div class=\"gistInfo\">" +
+	$(".files").append("<div class=\"gistFile" + editorNum + "\">" +
+			"<div class=\"fileInfo\">" +
 			"<input type=\"text\" class=\"filename\" placeholder=\"Tiedostonimi, esim. File.java\"/>" + 
 			"<input type=\"button\" class=\"removeFile\" value=\"Poista\" style=\"margin-left: 4px;\"/>" +
 			"</div>" +
@@ -71,7 +74,10 @@ function addFile() {
 	//Tehdään luodusta <div> elementistä uusi ACE-editor ja lisätään editori taulukkoon.
 	var makeEditorOf = "editor" + editorNum;
 	editors.push(ace.edit(makeEditorOf));
+	
+	editors[editors.length - 1].setTheme("ace/theme/cobalt");
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
+	editors[editors.length - 1].setOption("showPrintMargin", false);
 	editors[editors.length - 1].setOptions({ minLines :  20});
 	editors[editors.length - 1].setOptions({ maxLines :  40});
 	
@@ -92,8 +98,8 @@ function removeFile(target) {
 
 function getFieldValues() {
 	var data = {};
-	var gistId = $("#gistId").text();
-	var description = $("#description").val();
+	var gistId = $(".gistId").val();
+	var description = $(".description").val();
 	var fname = document.getElementsByClassName("filename");
 
 	//Tarkistetaan onko alkuperäisiin tiedostioihin tehty muutoksia
@@ -156,7 +162,7 @@ function getFieldValues() {
 		
 	
 	
-	$.post("http://localhost:8080/Opinnaytetyo/EditGist", JSON.stringify(data), function(response) {
+	$.post("http://localhost:8080/Opinnaytetyo/DoEdit", JSON.stringify(data), function(response) {
 		alert(response);
 		//window.location.href = "http://localhost:8080/Opinnaytetyo/";
 	}, "json");

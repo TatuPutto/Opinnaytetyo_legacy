@@ -33,12 +33,12 @@ public class GetGists extends HttpServlet {
 		String url = "https://api.github.com/gists";
 		String accessToken = (String)request.getAttribute("accessToken");
 		
-		//Jos accesstoken löytyy muodostetaan yhteys auktorisoituna käyttäjänä -> haetaan käyttäjän gistit(julkiset ja salaiset)
+		//Jos accesstoken lï¿½ytyy muodostetaan yhteys auktorisoituna kï¿½yttï¿½jï¿½nï¿½ -> haetaan kï¿½yttï¿½jï¿½n gistit(julkiset ja salaiset)
 		if(accessToken != null && !accessToken.isEmpty()) {
 			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
 			gists = parse.parseJSON(responseContent.get(2));
 		}
-		//Jos accesstokenia ei löytdy muodostetaan yhteys anonyyminä -> haetaan muiden käyttäjien julkisia gistejä
+		//Jos accesstokenia ei lï¿½ytdy muodostetaan yhteys anonyyminï¿½ -> haetaan muiden kï¿½yttï¿½jien julkisia gistejï¿½
 		else {
 			responseContent = UnauthConnection.formConnection("GET", url, "");
 			gists = parse.parseJSON(responseContent.get(2));
@@ -46,7 +46,7 @@ public class GetGists extends HttpServlet {
 			
 			
 		request.setAttribute("gists", gists);
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/ListGists.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsps/Gists.jsp");
 		rd.forward(request, response);
 	}
 }

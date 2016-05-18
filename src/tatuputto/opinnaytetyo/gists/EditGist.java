@@ -1,10 +1,9 @@
 package tatuputto.opinnaytetyo.gists;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
+import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 
 
@@ -19,45 +19,34 @@ import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 public class EditGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
    
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String accessToken = (String)request.getAttribute("accessToken");
 	
-		//Luetaan pyynnön mukana lähettetty JSON
-		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String jsonData = "";
-        if(br != null){
-        	jsonData = br.readLine();
-        }
-        
-        
-        ArrayList<String> responseContent = sendPatchData(response, accessToken, jsonData);
-       
-        response.setContentType("application/text");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));
-     
-	}
-	
-	
-	private ArrayList<String> sendPatchData(HttpServletResponse response, String accessToken, String jsonData) {
-		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ParseSingleGistJSON parse = new ParseSingleGistJSON();
+		AuthorizedConnectionOauth AuthConnection = new AuthorizedConnectionOauth();
+		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
-		String gistId = parse.parseJSON(jsonData).getId();
+		String gistId = request.getParameter("id");
 		String url = "https://api.github.com/gists/" + gistId;
-		ArrayList<String> responseContent = new ArrayList<String>();
+		String accessToken = (String)request.getAttribute("accessToken");
 		
-		//Jos access token löytyy, lähetetään muokkauspyyntö
+		ArrayList<String> responseContent;
+		Gist gist;
+		
+		//Jos accesstoken l�ytyy voidaan hakea julkisia ja salaisia gistej�
 		if(accessToken != null && !accessToken.isEmpty()) {
-			responseContent = connection.formConnection("PATCH", url, jsonData, accessToken);
+			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
+			gist = parse.parseJSON(responseContent.get(2));
 		}
-		//Jos ei löydy, lähetetään vastauskoodi 401 - Unauthorized ja lopetetaan muokkausprosessi
+		//Jos accesstokenia ei l�ydy voidaan hakea vain julkisia
 		else {
-			responseContent.add("401");
-			responseContent.add("Unauthorized");
+			responseContent = UnauthConnection.formConnection("GET", url, "");
+			gist = parse.parseJSON(responseContent.get(2));
 		}
 		
-		return responseContent;
+		
+		request.setAttribute("gist", gist);
+		request.setAttribute("id", gistId);
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsps/EditGist.jsp");
+		rd.forward(request, response);
 	}
-
 }

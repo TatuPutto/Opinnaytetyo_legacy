@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import tatuputto.opinnaytetyo.gists.GistOwner;
+import tatuputto.opinnaytetyo.gists.User;
 import tatuputto.opinnaytetyo.json.ParseAuthorizationInfo;
 
 
@@ -27,7 +27,6 @@ public class Login extends HttpServlet {
 	    cookies = request.getCookies();
 	    String accessToken = "";
 	    boolean tokenCookieFound = false;
-	    boolean validAuthorization = false;
 		
 	   
 	    //Tarkistetaan l�ytyyk� accesstoken ev�stett�
@@ -55,7 +54,7 @@ public class Login extends HttpServlet {
 	    		if(!responseContent.get(0).equals("404")) {
 	    			log("Access token on voimassa.");
 	    			
-	    			GistOwner user = parse.parseJSON(responseContent.get(2));
+	    			User user = parse.parseJSON(responseContent.get(2));
 	    			
 	    			HttpSession session = request.getSession(true);
 	    			session.setAttribute("username", user.getLogin());

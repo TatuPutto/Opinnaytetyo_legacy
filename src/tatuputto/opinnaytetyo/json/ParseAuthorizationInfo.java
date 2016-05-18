@@ -4,11 +4,11 @@ package tatuputto.opinnaytetyo.json;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tatuputto.opinnaytetyo.gists.GistOwner;
+import tatuputto.opinnaytetyo.gists.User;
 
 public class ParseAuthorizationInfo {
 	
-	public GistOwner parseJSON(String JSONresponse) {
+	public User parseJSON(String JSONresponse) {
 		try {
 			JSONObject authorizationInfo = new JSONObject(JSONresponse);
 			JSONObject userInfo = authorizationInfo.getJSONObject("user"); 
@@ -23,12 +23,12 @@ public class ParseAuthorizationInfo {
 	}
 	
 	
-	public GistOwner parseUserInfo(JSONObject userInfo) {
+	public User parseUserInfo(JSONObject userInfo) {
 		try {
 			String login = userInfo.getString("login");
 			String avatarUrl = userInfo.getString("avatar_url");
 			
-			GistOwner user = new GistOwner(login, avatarUrl);  
+			User user = new User(login, avatarUrl);  
 		    return user;
 		}	
 		catch (JSONException e) {

@@ -1,6 +1,8 @@
 var editor;
 var editors = [];
+var currentGistId;
 var fileNum = 2;
+
 
 $("document").ready(function() {
 	$(".content").css("height", ($(window).height() - 120));
@@ -8,16 +10,17 @@ $("document").ready(function() {
 	$(".loading").show();
 	
 	//Haetaan ensimmäisen gistin tiedostot sivun latauksen valmistuttua
-	var firstGistId = $(".listGists").find(".singleGist").first().attr("id");
-	getGistFiles(firstGistId);
+	currentGistId = $(".listGists").find(".singleGist").first().attr("id");
+	getGistFiles(currentGistId);
+	$("#" + currentGistId).addClass("selected");
 	
 	
 	//Klikatun gistin tiedostojen hakeminen
 	$(".singleGist").click(function() {
-		var gistId = $(this).attr("id");
+		currentGistId = $(this).attr("id");
 		
 		resetFields();
-		getGistFiles(gistId);
+		getGistFiles(currentGistId);
 		
 		$(".singleGist").removeClass("selected");
 		$(this).addClass("selected");
@@ -27,21 +30,20 @@ $("document").ready(function() {
 	});
 	
 	
-	//Valitun gistin muokkaaminen
-	$(".singleGistFiles").on("click", "#editGist", function() {
-		var gistId = $(this).data("gistid");
-		var url = "http://localhost:8080/Opinnaytetyo/GetSingleGist?id=" + gistId + "";
-		window.location.href = url;
-	});
-	
 	
 	//Valitun gistin poistaminen
-	$(".singleGistFiles").on("click", "#deleteGist", function() {
-		if (confirm("Haluatko varmasti poistaa tämän gistin?")) {
-			var gistId = $(this).data("gistid");
-			var url = "http://localhost:8080/Opinnaytetyo/DeleteGist?id=" + gistId + "";
+	$("#deleteGist").click(function() {
+		if (window.confirm("Haluatko varmasti poistaa tämän gistin?")) { 
+			var url = "http://localhost:8080/Opinnaytetyo/DeleteGist?id=" + currentGistId + "";
 			window.location.href = url;
 		}
+		
+	});
+	
+	//Valitun gistin muokkaaminen
+	$("#editGist").click(function() {
+		var url = "http://localhost:8080/Opinnaytetyo/EditGist?id=" + currentGistId + "";
+		window.location.href = url;	
 	});
 	
 });
@@ -56,7 +58,7 @@ function getGistFiles(gistId) {
 		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
 			console.log(response);
 			//addUtilityButtons(gistId);
-			handleResponse(response);			
+			handleResponse(gistId, response);			
 		});
 	}
 	else {
@@ -66,7 +68,7 @@ function getGistFiles(gistId) {
 
 
 //Puretaan tiedostojen sisältö ACE-editoreihin.
-function handleResponse(response) {
+function handleResponse(gistId, response) {
 	var i = 0;
 	for(var file in response) {
 		var owner = response[file]["filename"];
@@ -79,7 +81,7 @@ function handleResponse(response) {
 		
 		//Lisätään ensimmäisen tiedoston koodi jo olemassa olevaan editoriin.
 		if(i === 0) {
-			//$(".gistInfo").append("<a href=\"\">" + filename + "</a>");
+			
 			$("#toGist").attr("href", "");
 			$("#toGist").text("<Author> / " + filename);
 			
@@ -87,7 +89,7 @@ function handleResponse(response) {
 			editor = ace.edit("editor1");
 			editor.setTheme("ace/theme/cobalt");
 			editor.getSession().setMode("ace/mode/java");
-			editor.setOption("showPrintMargin", false)
+			editor.setOption("showPrintMargin", false);
 			editor.setOptions({ maxLines: amountOfLines });
 			editor.setValue(fileContent);
 			editor.setReadOnly(true);
@@ -129,7 +131,7 @@ function createEditor(filename, fileContent, amountOfLines) {
 	
 	editors[editors.length - 1].setTheme("ace/theme/cobalt");
 	editors[editors.length - 1].getSession().setMode("ace/mode/java");
-	editors[editors.length - 1].setOption("showPrintMargin", false)
+	editors[editors.length - 1].setOption("showPrintMargin", false);
 	editors[editors.length - 1].setOptions({ maxLines: amountOfLines });
 	editors[editors.length - 1].setValue(fileContent);
 	editors[editors.length - 1].setReadOnly(true);

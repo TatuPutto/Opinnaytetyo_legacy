@@ -189,7 +189,7 @@ div[id^="editor"] {
 }
 
 .loading {
-	background: url(loading.gif) no-repeat center center;
+	background: url(../images/loading.gif) no-repeat center center;
 	height: 90%;
 	display: none;
 }

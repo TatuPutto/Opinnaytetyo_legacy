@@ -9,13 +9,13 @@
 
 <!-- <link href="styles.css " rel="stylesheet" type="text/css" />-->
 
-<link href="CSS/ListGists.css " rel="stylesheet" type="text/css" />
-<link href="CSS/Header.css " rel="stylesheet" type="text/css" />
-<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<link href="http://localhost:8080/Opinnaytetyo/css/Header.css" rel="stylesheet" type="text/css"/>
+<link href="http://localhost:8080/Opinnaytetyo/css/Gists.css" rel="stylesheet" type="text/css"/>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript"></script>
-<script src="JS/ShowGistFiles.js" type="text/javascript"></script>
+<script src="http://localhost:8080/Opinnaytetyo/js/ShowGistFiles.js" type="text/javascript"></script>
 
 <title>Gists</title>
 </head>

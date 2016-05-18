@@ -1,11 +1,11 @@
 package tatuputto.opinnaytetyo.gists;
 
-public class GistOwner {
+public class User {
 	private String login;
 	private String avatarUrl;
 	
 	
-	public GistOwner(String login, String avatarUrl) {
+	public User(String login, String avatarUrl) {
 		this.login = login;
 		this.avatarUrl = avatarUrl;
 	}

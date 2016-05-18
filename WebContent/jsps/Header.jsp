@@ -8,28 +8,22 @@
 		
 		%>
 		<div id="userInfo">
-					<img src="<%=avatarUrl %>"/>
-					<p><%=username %></p>
-	</div>
+			<img src="<%=avatarUrl %>"/>
+			<p><%=username %></p>
+		</div>
 		
 		<ul id="navmenu">
 			<li><a href="GetGists">Listaa gistit</a></li>
-			<li><a href="CreateNewGist.jsp">Luo uusi Gist</a></li>
+			<li><a href="CreateNewGist">Luo uusi Gist</a></li>
 			<li><a href="Logout">Logout</a></li>
-			<li>
-				
-			</li>
-		
 		</ul>
-		
-		<%
-		
+		<%	
 	} 
 	else { 
 		%>
 		<ul id="navmenu">
 			<li><a href="GetGists">Listaa gistit</a></li>
-			<li><a href="CreateNewGist.jsp">Luo uusi Gist</a></li>
+			<li><a href="CreateNewGist">Luo uusi Gist</a></li>
 			<li><a href="Login">Login</a></li>
 		</ul>	
 		<%

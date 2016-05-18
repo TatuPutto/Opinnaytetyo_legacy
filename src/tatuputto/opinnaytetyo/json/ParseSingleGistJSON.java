@@ -2,7 +2,7 @@ package tatuputto.opinnaytetyo.json;
 
 import tatuputto.opinnaytetyo.gists.Gist;
 import tatuputto.opinnaytetyo.gists.GistFile;
-import tatuputto.opinnaytetyo.gists.GistOwner;
+import tatuputto.opinnaytetyo.gists.User;
 
 import java.util.ArrayList;
 import java.util.Iterator;
