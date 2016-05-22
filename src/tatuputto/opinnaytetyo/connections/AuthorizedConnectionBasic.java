@@ -41,18 +41,18 @@ public class AuthorizedConnectionBasic extends Connection {
 			HttpEntity entity = response.getEntity();
 
 			String line = "";
-			String str = "";
+			String content = "";
 			if (entity != null) {
 				//K�sitell��n vastauksen sis�lt� rivi kerrallaan
 			    try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
 			    	while ((line = br.readLine()) != null) {
-			    		str = str.concat(line + "\n");
+			    		content = content.concat(line + "\n");
 					}
-			    	System.out.println(str);
+			    	System.out.println(content);
 			    	//Lisätään vastaukoodi ja entityn sisältö taulukkoon
 			    	responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
 					responseContent.add(response.getStatusLine().getReasonPhrase());
-			    	responseContent.add(str);
+			    	responseContent.add(content);
 			    	
 			    	response.close();
 			    } 

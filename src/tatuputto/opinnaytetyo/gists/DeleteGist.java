@@ -25,7 +25,7 @@ public class DeleteGist extends HttpServlet {
 			String gistId = request.getParameter("id");
 			String url = "https://api.github.com/gists/" + gistId;
 			
-			ArrayList<String> responseContent = connection.formConnection("DELETE", url, "", accessToken);
+			String[] responseContent = connection.formConnection("DELETE", url, "", accessToken);
 		
 			//TODO lähetä vastaukoodi
 		}

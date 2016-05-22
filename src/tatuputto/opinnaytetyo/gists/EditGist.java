@@ -23,30 +23,34 @@ public class EditGist extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ParseSingleGistJSON parse = new ParseSingleGistJSON();
 		AuthorizedConnectionOauth AuthConnection = new AuthorizedConnectionOauth();
-		UnauthorizedConnection UnauthConnection = new UnauthorizedConnection();
 		
 		String gistId = request.getParameter("id");
 		String url = "https://api.github.com/gists/" + gistId;
 		String accessToken = (String)request.getAttribute("accessToken");
+		int userId = (int)request.getAttribute("userId");
 		
-		ArrayList<String> responseContent;
-		Gist gist;
+		String[] responseContent;
+		Gist gist = null;
 		
-		//Jos accesstoken l�ytyy voidaan hakea julkisia ja salaisia gistej�
-		if(accessToken != null && !accessToken.isEmpty()) {
-			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
-			gist = parse.parseJSON(responseContent.get(2));
+		
+		
+		responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
+		gist = parse.parseJSON(responseContent[2]);
+		
+		//Tarkistetaan onko kirjautunut käyttäjä gistin omistaja
+		if(gist.getOwner().getId() == userId) {
+			request.setAttribute("gist", gist);
+			request.setAttribute("id", gistId);
+			
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsps/EditGist.jsp");
+			rd.forward(request, response);
 		}
-		//Jos accesstokenia ei l�ydy voidaan hakea vain julkisia
+		//Jos ei ole lähetetään vastauskoodi 403 - forbidden
 		else {
-			responseContent = UnauthConnection.formConnection("GET", url, "");
-			gist = parse.parseJSON(responseContent.get(2));
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, "Sinulla ei ole oikeuksia muokata tätä gistiä.");
 		}
 		
 		
-		request.setAttribute("gist", gist);
-		request.setAttribute("id", gistId);
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/jsps/EditGist.jsp");
-		rd.forward(request, response);
+		
 	}
 }

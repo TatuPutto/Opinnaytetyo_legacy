@@ -46,7 +46,7 @@ a:hover {
 }
 
 .singleGist {
-	height: 80px;
+	height: 100px;
 	cursor: pointer;
 	/*border-style: solid;*/
 	border-radius: 4px;

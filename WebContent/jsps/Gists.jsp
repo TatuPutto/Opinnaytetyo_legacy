@@ -26,6 +26,17 @@
 	
 		<div class="contentLeft">
 			<!-- Listataan gistit -->
+			
+			<% 
+			if(request.getAttribute("lastPage") != null) {
+				%><input type="hidden" id="lastPageNum" value="<%=request.getAttribute("lastPage") %>"/><br><%
+			}
+			%>
+			
+			<input type="button" id="getUsersGists" value="Omat gistit"/>
+			<input type="button" id="getAllPublicGists" value="Muut gistit"/>
+			
+			
 			<div class="listGists">
 				
 				<% 
@@ -50,29 +61,52 @@
 							rawUrl = gistList.get(i).getFiles().get(0).getRawUrl();
 							
 							%>
-							<div class="singleGist" id="<%=id %>" data-rawurl="<%=rawUrl %>">
+							<div class="singleGist" id="<%=id %>">
 								<p class="gistOwner"><%=owner %> / <a href=""><%=name %></a></p>
 								<p class="descPara"><%=description %></p>
+								<p><%=i %></p>
 							</div>
 							<%
 						}	
 					}
+					
+					if(request.getAttribute("fetchMethod").equals("all")) {
+						%>
+						<input type="button" id="loadMore" value="Lataa lisää"/>
+						<%
+					}
+					
 				} 
 				else {
 					out.println("Gistejä ei löytynyt");
 				}
 				%>
+			
 			</div>
+			
 		</div>
+		
 		
 		<div class="contentRight">
 			<!-- Yksittäisen gistin tiedostot -->
 			<div class="singleGistFiles">
 				<!-- Gistin tiedot, nimi, kuvaus, tekijä jne. -->
 				<div class="gistInfo">
-					<a id="toGist" href=""></a>
-					<input type="button" id="deleteGist" value="Poista"/>
-					<input type="button" id="editGist" value="Muokkaa"/>
+					<a id="toGist" href=""></a> 
+					<% 
+					/*
+					if((Boolean)request.getAttribute("loggedIn")) {
+						
+						<input type="button" id="deleteGist" value="Poista"/>
+						<input type="button" id="editGist" value="Muokkaa"/>
+						<% 
+					}
+					else { 
+						
+						<input type="button" id="forkGist" value="Fork"/>
+						<% 
+					}*/
+					%>
 				</div>
 				
 				<!-- Yksittäinen tiedosto -->

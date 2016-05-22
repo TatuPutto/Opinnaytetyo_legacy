@@ -11,46 +11,73 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+/**
+ * Tämä luokka hoitaa useamman gistin tiedot sisältävän JSONin parsimisen.
+ * Lopputuotoksena palautetaan taulukko, joka sisältää referenssimuuttujia parsituista tiedoista muodostettuihin Gist-luokan olioihin.
+ */
 public class ParseMultipleGistsJSON {
 	
 	public ArrayList<Gist> parseJSON(String JSONresponse) {
 		ArrayList<Gist> gists = new ArrayList<Gist>();
+		JSONArray jArray;
 		
 		try {
-			//Muodostetaan vastauksena saadusta String muotoisesta JSONinsta, JSON taulukko
-			JSONArray jArray = new JSONArray(JSONresponse);
-
+			//Muodostetaan vastauksena saadusta String muotoisesta JSONinsta, JSON-taulukko
+			jArray = new JSONArray(JSONresponse);
+	
 			//K�yd��n muodostettu JSON taulukko olio kerrallaan l�pi
 			for (int i = 0; i < jArray.length(); i++) {
-				//Muodostetaan jokaisesta taulukon indeksist� JSON olio
-				JSONObject jObject = jArray.getJSONObject(i); 
+				
+				try {
+					//Muodostetaan jokaisesta taulukon indeksistä JSON-olio, indeksi == gist
+					JSONObject jObject = jArray.getJSONObject(i); 
+				
+					String gistId = jObject.getString("id");
+					String description = jObject.getString("description"); 
 			
-				String gistId = jObject.getString("id");
-				String description = jObject.getString("description"); 
-				
-				JSONObject owner = jObject.getJSONObject("owner"); 
-				
-				//Etsit��n avain, joka sis�lt�� gistin tiedostot
-				JSONObject files = jObject.getJSONObject("files"); 
-				
-				//luodaan uusi gist, jolle annetaan arvoksi id, kuvaus, sekä lista sen sisältämistä tiedostoista
-				gists.add(new Gist(gistId, description, parseGistOwnerInfo(owner), parseNestedObjects(files)));
+					//Etsitään olio, joka sisältää gistin tiedostot
+					JSONObject files = jObject.getJSONObject("files"); 
+					
+					//Poikkeus anonyyminä lisätyille gisteille
+					User owner;
+					try {
+						owner = parseGistOwnerInfo(jObject.getJSONObject("owner"));
+		
+						gists.add(new Gist(gistId, description, owner, parseNestedObjects(files)));
+					}
+					catch(JSONException e) {
+						//owner = new User("Anonymous", "https://avatars.githubusercontent.com/u/5699778?v=3");
+					}
+					
+					/*String spam = "Bootstrap Customizer Config";
+					String spam2 = "An error occurred while processing events.";
+					
+					if(description.equals(spam) || description.equals(spam2)) {
+						
+					}
+					else {
+						gists.add(new Gist(gistId, description, owner, parseNestedObjects(files)));
+					}
+					*/
+				}
+				catch(JSONException e) {}
 			}
-			
-			return gists;
 		}
-		catch(JSONException e) {}
-		return null;
+		catch(JSONException e) {
+			return null;
+		}
+		
+		return gists;
 	}
 	
 	
 	public User parseGistOwnerInfo(JSONObject ownerInfo) {
 		try {
+			int id = ownerInfo.getInt("id");
 			String login = ownerInfo.getString("login");
 			String avatarUrl = ownerInfo.getString("avatar_url");
 			
-			User owner = new User(login, avatarUrl);  
+			User owner = new User(id, login, avatarUrl);  
 		    return owner;
 		}	
 		catch (JSONException e) {

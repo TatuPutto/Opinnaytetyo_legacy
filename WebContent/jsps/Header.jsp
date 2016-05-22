@@ -15,7 +15,7 @@
 		<ul id="navmenu">
 			<li><a href="GetGists">Listaa gistit</a></li>
 			<li><a href="CreateNewGist">Luo uusi Gist</a></li>
-			<li><a href="Logout">Logout</a></li>
+			<li><a href="http://localhost:8080/Opinnaytetyo/HandleLogout">Logout</a></li>
 		</ul>
 		<%	
 	} 
@@ -24,7 +24,7 @@
 		<ul id="navmenu">
 			<li><a href="GetGists">Listaa gistit</a></li>
 			<li><a href="CreateNewGist">Luo uusi Gist</a></li>
-			<li><a href="Login">Login</a></li>
+			<li><a href="http://localhost:8080/Opinnaytetyo/HandleLogin">Login</a></li>
 		</ul>	
 		<%
 	}

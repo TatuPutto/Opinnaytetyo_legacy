@@ -15,8 +15,8 @@ import tatuputto.opinnaytetyo.gists.User;
 import tatuputto.opinnaytetyo.json.ParseAuthorizationInfo;
 
 
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/HandleLogin")
+public class HandleLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,7 +29,7 @@ public class Login extends HttpServlet {
 	    boolean tokenCookieFound = false;
 		
 	   
-	    //Tarkistetaan l�ytyyk� accesstoken ev�stett�
+	    //Tarkistetaan löytyykö accesstokenin sisältävää evästettä
 	    if(cookies != null) {
 	    	for (int i = 0; i < cookies.length; i++) {
 	    		cookie = cookies[i];
@@ -43,27 +43,27 @@ public class Login extends HttpServlet {
 	    		}	
 	    	}
 	    	
-	    	if(!tokenCookieFound) {
-	    		response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");
-	    	}
-	    	//Jos ev�ste l�ytyi, tarkistetaan onko access token viel� voimassa
-	    	else {
+	    	//Jos eväste löytyi, tarkistetaan onko access token vielä voimassa
+	    	if(tokenCookieFound) {
 	    		ArrayList<String> responseContent = checkAuthorization(accessToken);	
 	    		
-	    		//Jos ev�ste on voimassa, aloitetaan sessio ja asetetaan ev�steen arvo sessiomuuttujaksi
+	    		//Jos eväste on voimassa, aloitetaan sessio
 	    		if(!responseContent.get(0).equals("404")) {
 	    			log("Access token on voimassa.");
 	    			
 	    			User user = parse.parseJSON(responseContent.get(2));
 	    			
+	    			//Asetetaan tarvittavat sessiomuuttujat
 	    			HttpSession session = request.getSession(true);
+	    			session.setAttribute("loggedIn", true);
+	    			session.setAttribute("userId", user.getId());
 	    			session.setAttribute("username", user.getLogin());
 	    			session.setAttribute("avatar", user.getAvatarUrl());
 	    			session.setAttribute("accessToken", accessToken);
 
-	    			response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
+	    			response.sendRedirect("http://localhost:8080/Opinnaytetyo/gists");
 	    		}
-	    		//Jos ei ole voimassa, poistetaan vanha ev�ste ja l�hetet��n k�ytt�j� tekem��n uusi auktorisointi
+	    		//Jos ei ole voimassa, poistetaan vanha eväste ja lähetetään käyttäjä tekemään uusi auktorisointi
 	    		else {
 	    			log("Access token ei ole enää voimassa.");
 	    			
@@ -73,9 +73,12 @@ public class Login extends HttpServlet {
 	    			
 	    			response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");
 	    		}
+	    	}
+	    	else {
+	    		response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");
 	    	}    	
 	    }
-	    //Jos sessiota eik� ev�stett� l�ydy, l�hetet��n k�ytt�j� tunnistautumaan githubin v�lityksell�
+	    //Jos sessiota eikä evästettä löydy, lähetetään käyttäjä tunnistautumaan githubin välityksellä
 	    //https://developer.github.com/v3/oauth/#web-application-flow
 	    else {
 	    	response.sendRedirect("https://github.com/login/oauth/authorize?client_id=566fea61a0cebae27268&scope=gist");

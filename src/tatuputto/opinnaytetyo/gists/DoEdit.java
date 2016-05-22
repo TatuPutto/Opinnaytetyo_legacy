@@ -19,7 +19,8 @@ import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 @WebServlet("/DoEdit")
 public class DoEdit extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-   
+	private String[] responseContent;
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String accessToken = (String)request.getAttribute("accessToken");
 	
@@ -30,11 +31,11 @@ public class DoEdit extends HttpServlet {
 				jsonData = br.readLine();
 			}
 
-			ArrayList<String> responseContent = sendPatchData(response, accessToken, jsonData);
+			sendPatchData(response, accessToken, jsonData);
 
 			response.setContentType("application/text");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(responseContent.get(0) + ", " + responseContent.get(1));
+			response.getWriter().write(responseContent[0] + ", " + responseContent[1]);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -42,7 +43,7 @@ public class DoEdit extends HttpServlet {
 	}
 	
 	
-	private ArrayList<String> sendPatchData(HttpServletResponse response, String accessToken, String jsonData) {
+	private void sendPatchData(HttpServletResponse response, String accessToken, String jsonData) {
 		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
 		ParseGistEditJSON parse = new ParseGistEditJSON();
 		
@@ -50,20 +51,10 @@ public class DoEdit extends HttpServlet {
 		log(gistId);
 		
 		String url = "https://api.github.com/gists/" + gistId;
-		ArrayList<String> responseContent = new ArrayList<String>();
 		
-		//Jos access token löytyy, lähetetään muokkauspyyntö
-		if(accessToken != null && !accessToken.isEmpty()) {
-			responseContent = connection.formConnection("PATCH", url, jsonData, accessToken);
-			log(responseContent.get(0) + ", " + responseContent.get(1));
-		}
-		//Jos ei löydy, lähetetään vastauskoodi 401 - Unauthorized ja lopetetaan muokkausprosessi
-		else {
-			responseContent.add("401");
-			responseContent.add("Unauthorized");
-		}
-		
-		return responseContent;
+		responseContent = connection.formConnection("PATCH", url, jsonData, accessToken);
+		log(responseContent[0] + ", " + responseContent[1]);
+
 	}
 
 }

@@ -27,11 +27,11 @@ public class GetGistSource extends HttpServlet {
 		String accessToken = "<accessToken>";
 		
 			
-		ArrayList<String> responseContent = connection.formConnection("GET", rawUrl, "", accessToken);
+		String[] responseContent = connection.formConnection("GET", rawUrl, "", accessToken);
 		
 		response.setContentType("application/text");
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(responseContent.get(2));
+		response.getWriter().write(responseContent[2]);
 	}
 
 	

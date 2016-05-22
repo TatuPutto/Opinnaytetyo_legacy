@@ -25,10 +25,11 @@ public class ParseAuthorizationInfo {
 	
 	public User parseUserInfo(JSONObject userInfo) {
 		try {
+			int id = userInfo.getInt("id");
 			String login = userInfo.getString("login");
 			String avatarUrl = userInfo.getString("avatar_url");
 			
-			User user = new User(login, avatarUrl);  
+			User user = new User(id, login, avatarUrl);  
 		    return user;
 		}	
 		catch (JSONException e) {

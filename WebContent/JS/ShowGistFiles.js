@@ -2,6 +2,7 @@ var editor;
 var editors = [];
 var currentGistId;
 var fileNum = 2;
+var pageNum = 2;
 
 
 $("document").ready(function() {
@@ -16,17 +17,19 @@ $("document").ready(function() {
 	
 	
 	//Klikatun gistin tiedostojen hakeminen
-	$(".singleGist").click(function() {
-		currentGistId = $(this).attr("id");
-		
-		resetFields();
-		getGistFiles(currentGistId);
-		
-		$(".singleGist").removeClass("selected");
-		$(this).addClass("selected");
-		
-		$(".singleGistFiles").hide();
-		$(".loading").show();
+	$(".listGists").on("click", ".singleGist", function() {
+		var selectedGistId = $(this).attr("id");
+		if(currentGistId !== selectedGistId) {
+			currentGistId = selectedGistId;
+			resetFields();
+			getGistFiles(currentGistId);
+			
+			$(".singleGist").removeClass("selected");
+			$(this).addClass("selected");
+			
+			$(".singleGistFiles").hide();
+			$(".loading").show();
+		}
 	});
 	
 	
@@ -46,6 +49,24 @@ $("document").ready(function() {
 		window.location.href = url;	
 	});
 	
+	
+	
+	$("#getUsersGists").click(function() {
+		var url = "http://localhost:8080/Opinnaytetyo/Gists?fetch=user";
+		window.location.href = url;	
+	});
+	
+	
+	$("#getAllPublicGists").click(function() {
+		var url = "http://localhost:8080/Opinnaytetyo/Gists?fetch=all";
+		window.location.href = url;	
+	});
+	
+	$(".listGists").on("click", "#loadMore", function() {
+		alert("clicked");
+		loadMoreGists();
+	});
+	
 });
 
 
@@ -56,8 +77,6 @@ function getGistFiles(gistId) {
 	
 	if(gistId) {
 		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
-			console.log(response);
-			//addUtilityButtons(gistId);
 			handleResponse(gistId, response);			
 		});
 	}
@@ -66,12 +85,11 @@ function getGistFiles(gistId) {
 	}
 }
 
-
 //Puretaan tiedostojen sisältö ACE-editoreihin.
 function handleResponse(gistId, response) {
 	var i = 0;
 	for(var file in response) {
-		var owner = response[file]["filename"];
+		//var owner = response[file]["owner"];
 		var filename = response[file]["filename"];
 		var fileContent = response[file]["content"];
 		
@@ -149,3 +167,42 @@ function resetFields() {
 	$(".singleGistFiles").find(".gistFile").remove();
 }
 
+
+
+
+function loadMoreGists() {
+	var lastPage = $("#lastPageNum").val();
+	var data = {page: pageNum};
+	
+	if(pageNum < lastPage) {
+		$.get("http://localhost:8080/Opinnaytetyo/GetMoreGists", data, function(response) {
+			console.log(response);
+			handleNewGists(response);			
+		});
+	}
+	
+	pageNum++;
+}
+
+function handleNewGists(response) {
+	for(var file in response) {
+		var owner = response[file]["owner"];
+		var gistId = response[file]["id"];
+		var filename = response[file]["files"];
+		var description = response[file]["description"];
+		
+		appendGistToList(owner, gistId, filename, description);
+	}
+}
+
+var index = 1;
+function appendGistToList(owner, gistId, filename, description) {
+	$(".listGists").append("<div class=\"singleGist\" id=\"" + gistId + "\">" +
+			"<p class=\"gistOwner\">" + owner + " / <a href=\"\">" + filename + "</a></p>" +
+			"<p class=\"descPara\">" + description + "</p>" +
+			"<br><p class=\"descPara\">" + index + "</p>" +
+			"</div>"
+	);
+	index++;
+	
+}

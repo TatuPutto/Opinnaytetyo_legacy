@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * OAuth-prosessin viimeinen osa, vaihdetaan koodi käyttäjäkohtaiseen Access tokeniin.
+ * OAuth-prosessin viimeinen osa, vaihdetaan koodi kï¿½yttï¿½jï¿½kohtaiseen Access tokeniin.
  */
 @WebServlet("/GetAccessToken")
 public class GetAccessToken extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	//Sovellukselle rekisteröidyt avaimet
+	//Sovellukselle rekisterï¿½idyt avaimet
 	protected static final String clientId = "566fea61a0cebae27268";
 	protected static final String clientSecret = "87454f258250d9170e31a8f13b51e6a612bd6545";
 	
@@ -30,8 +30,8 @@ public class GetAccessToken extends HttpServlet {
      * 
      */
    	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-   		//TODO  tarkista, että statet täsmäävät, jos ei täsmää, lopeta sisäänkirjautumisprosessi
-   		//TODO tallena access_code sessiioon, ehkä evästeeseen
+   		//TODO  tarkista, ettï¿½ statet tï¿½smï¿½ï¿½vï¿½t, jos ei tï¿½smï¿½ï¿½, lopeta sisï¿½ï¿½nkirjautumisprosessi
+   		//TODO tallena access_code sessiioon, ehkï¿½ evï¿½steeseen
    		/*as well as the state you provided in the previous step in a state parameter. If the states don't match, the request has been created by a third party and the process should be aborted.*/
    		
    		String codeToExchange = request.getParameter("code");
@@ -49,13 +49,16 @@ public class GetAccessToken extends HttpServlet {
         String[] token = line.split("&");
         token = token[0].split("=");
         
-   		Cookie accessTokenCookie = new Cookie("accesstoken", token[1]);
-   		accessTokenCookie.setMaxAge(60*60*24*7); 
-   		response.addCookie(accessTokenCookie);
+   		Cookie tokenCookie = new Cookie("accesstoken", token[1]);
+   		tokenCookie.setMaxAge(60*60*24*7); 
+   		response.addCookie(tokenCookie);
    		
-   		HttpSession session = request.getSession(true);
+   		/*HttpSession session = request.getSession(true);
+   		session.setAttribute("loggedIn", true);
 		session.setAttribute("accessToken", token[1]);
+		*/
    		
-   		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/")); 		
+   		//response.sendRedirect("http://localhost:8080/Opinnaytetyo/Gists"); 
+   		response.sendRedirect("http://localhost:8080/Opinnaytetyo/HandleLogin"); 		
    	}
 }

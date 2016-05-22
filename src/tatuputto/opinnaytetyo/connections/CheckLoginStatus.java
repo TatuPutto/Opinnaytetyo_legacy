@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -15,8 +16,16 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet Filter implementation class CheckSession
  */
-@WebFilter(filterName = "CheckSession", urlPatterns = ("/*"))
-public class CheckSession implements Filter {
+//@WebFilter(servletNames = {"GetGists", "CreateGist"}, urlPatterns = {"/gists/*", "/create/*"}) //urlPatterns = ("/gists/*")
+@WebFilter(urlPatterns = {
+		"/Gists", 
+		"/CreateGist", 
+		"/EditGist", 
+		"/DeleteGist", 
+		"/jsps/CreateNewGist.jsp",
+		"/jsps/EditGist.jsp"
+})
+public class CheckLoginStatus implements Filter {
 	public void destroy() {}
 	public void init(FilterConfig fConfig) throws ServletException {}
 	
@@ -24,17 +33,18 @@ public class CheckSession implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-		String accessToken = "";
-
-		
-		if(req.getSession(false) != null) {
-			HttpSession session = req.getSession(false);
-			accessToken = (String)session.getAttribute("accessToken"); 
-			//req.setAttribute("authorizedUser", true);
+        HttpSession session = req.getSession(false);
+      
+		if(session.getAttribute("userId") != null) {
+			//session.setAttribute("loggedIn", true);
+			chain.doFilter(req, res);
+		}
+		else {
+			res.sendRedirect("http://localhost:8080/Opinnaytetyo/jsps/Login.jsp");
 		}
 		
-		req.setAttribute("accessToken", accessToken);
-		chain.doFilter(req, res);
+		
+		
 	}
 
 }
