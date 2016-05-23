@@ -76,7 +76,7 @@ function getGistFiles(gistId) {
 	var data = {id : gistId};
 	
 	if(gistId) {
-		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
+		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGist", data, function(response) {
 			handleResponse(gistId, response);			
 		});
 	}
@@ -88,10 +88,13 @@ function getGistFiles(gistId) {
 //Puretaan tiedostojen sisältö ACE-editoreihin.
 function handleResponse(gistId, response) {
 	var i = 0;
-	for(var file in response) {
-		//var owner = response[file]["owner"];
-		var filename = response[file]["filename"];
-		var fileContent = response[file]["content"];
+	var owner = response["login"];
+	var ownerAvatarUrl = response["avatarUrl"];
+	var files = response["files"];
+	
+	for(var singleFile in files) {
+		var filename = files[singleFile]["filename"];
+		var fileContent = files[singleFile]["content"];
 		
 		//Jaetaan koodi new line merkkien kohdalta, katsotaan miten moneen osaan koodi jaettiin ->
 		//editorille allokoitava rivimäärä.
@@ -99,9 +102,9 @@ function handleResponse(gistId, response) {
 		
 		//Lisätään ensimmäisen tiedoston koodi jo olemassa olevaan editoriin.
 		if(i === 0) {
-			
+			$(".ownerAvatar").attr("src", ownerAvatarUrl);
 			$("#toGist").attr("href", "");
-			$("#toGist").text("<Author> / " + filename);
+			$("#toGist").text(owner + " / " + filename);
 			
 			$(".gistFirstFile a").text(filename);
 			editor = ace.edit("editor1");
@@ -174,9 +177,8 @@ function loadMoreGists() {
 	var lastPage = $("#lastPageNum").val();
 	var data = {page: pageNum};
 	
-	if(pageNum < lastPage) {
+	if(pageNum <= lastPage) {
 		$.get("http://localhost:8080/Opinnaytetyo/GetMoreGists", data, function(response) {
-			console.log(response);
 			handleNewGists(response);			
 		});
 	}
@@ -200,7 +202,7 @@ function appendGistToList(owner, gistId, filename, description) {
 	$(".listGists").append("<div class=\"singleGist\" id=\"" + gistId + "\">" +
 			"<p class=\"gistOwner\">" + owner + " / <a href=\"\">" + filename + "</a></p>" +
 			"<p class=\"descPara\">" + description + "</p>" +
-			"<br><p class=\"descPara\">" + index + "</p>" +
+			"<br><p class=\"descPara\">More: " + index + "</p>" +
 			"</div>"
 	);
 	index++;

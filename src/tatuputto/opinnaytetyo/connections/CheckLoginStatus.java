@@ -17,11 +17,12 @@ import javax.servlet.http.HttpSession;
  * Servlet Filter implementation class CheckSession
  */
 //@WebFilter(servletNames = {"GetGists", "CreateGist"}, urlPatterns = {"/gists/*", "/create/*"}) //urlPatterns = ("/gists/*")
+//TODO keksi parempi tapa estää pääsy kirjautumattomana muille sivuille kuin login ja forbidden
 @WebFilter(urlPatterns = {
-		"/Gists", 
 		"/CreateGist", 
 		"/EditGist", 
 		"/DeleteGist", 
+		"/jsps/Gists.jsp", 
 		"/jsps/CreateNewGist.jsp",
 		"/jsps/EditGist.jsp"
 })
@@ -40,7 +41,7 @@ public class CheckLoginStatus implements Filter {
 			chain.doFilter(req, res);
 		}
 		else {
-			res.sendRedirect("http://localhost:8080/Opinnaytetyo/jsps/Login.jsp");
+			res.sendRedirect("http://localhost:8080/Opinnaytetyo/jsps/Forbidden.jsp");
 		}
 		
 		

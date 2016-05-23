@@ -33,10 +33,7 @@ public class GetMoreGists extends HttpServlet {
 	
 		String pageNum = request.getParameter("page");
 		log("PageNumber: " + pageNum);
-		
-		
-		
-		ArrayList<Gist> gists;
+	
 		
 		/*
 		 * The pagination info is included in the Link header. 
@@ -45,23 +42,26 @@ public class GetMoreGists extends HttpServlet {
 		 * Link: <https://api.github.com/user/repos?page=3&per_page=100>; rel="next",
   		 * 		<https://api.github.com/user/repos?page=50&per_page=100>; rel="last"
 		 */
-		String url = "https://api.github.com/gists/public?page=2&per_page=100";
-
+		String url = "https://api.github.com/gists/public?page=" + pageNum + "&per_page=20";
+		//String url = "https://api.github.com/gists/public?page=1&per_page=30";
 		HttpSession session = request.getSession(false);
 		String accessToken = (String)session.getAttribute("accessToken");
-		
-		
-
 	
-		String[] responseContent = AuthConnection.formConnection("GET", url, "", "e20b425a981e16204e6bea7ac7e79dad329a70bc");
+		
+		String[] responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
 		
 		String data = "";
 
-		JSONArray arr = parse.parseJSON(responseContent[2]);
-		if(arr.length() > 0) {
-			log("" + arr);
-			data = arr.toString();
+		JSONArray arr = new JSONArray();
+		try {
+			arr = parse.parseJSON(responseContent[2]);
 		}
+		catch(Exception e) {
+
+		}	
+		
+		data = arr.toString();
+		
 		
 		
 		response.setContentType("application/json");

@@ -4,14 +4,10 @@ package tatuputto.opinnaytetyo.connections;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
-import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
-import org.apache.http.HeaderIterator;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -19,18 +15,19 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeaderElementIterator;
 
 /**
- * Muodostaa yhteyden palvelimeen API:n ja Apachen HTTP Clientin avulla.
- * 
+ * Muodostetaan yhteys GitHubin palvelimeen.
+ * Auktorisointiin käytetään GitHubin OAuth implementaatiota.
+ * https://developer.github.com/v3/oauth/
  */
 public class AuthorizedConnectionOauth extends Connection {
 	
 	/**
-	 * Muodostaa yhteyden palvelimeen, lis�� pyynt��n Authorization headerin(Oauth).
-	 * @param method K�ytett�v� HTTP -metodi(GET, POST, PATCH, DELETE).
-	 * @param url URL-osoite, minne pyynt� l�het��n.
-	 * @param data Pyynn�n mukana l�hetett�v� data.
-	 * @param accessToken K�ytt�j�kohtainen avain, jonka avulla voidaan tehda muutoksia k�ytt�j�n gisteihin API:n v�lityksell�.
-	 * @return Palauttaa vastauksen sis�ll�n String muodossa.
+	 * Muodostaa yhteyden palvelimeen, lisää pyyntöön Authorization-headerin(Oauth).
+	 * @param method Käytettävä HTTP -metodi(GET, POST, PATCH, DELETE).
+	 * @param url URL-osoite, minne pyyntö lähetään.
+	 * @param data Pyynnön mukana lähetettävä data.
+	 * @param accessToken Käyttäjäkohtainen avain, jonka avulla voidaan tehda muutoksia käyttäjän gisteihin API:n välityksellä.
+	 * @return Palauttaa vastauksen sisällön String muodossa.
 	 */
 	public String[] formConnection(String method, String url, String data, String accessToken) {
 		String[] responseContent = new String[5];
@@ -40,11 +37,11 @@ public class AuthorizedConnectionOauth extends Connection {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 
-			//Lisätään auktorisointi header
+			//Lisätään Authorization-header
 		    String authInfo = "token " + accessToken;
 		    httpMethod.addHeader("Authorization", authInfo);
 		    
-		    //Suoritetaan pyyntö
+		    //Lähetetään pyyntö
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
 		
 			//Haetaan Link-headerin arvot, seuraava sivu ja viimeinen sivu
@@ -52,11 +49,10 @@ public class AuthorizedConnectionOauth extends Connection {
 			String lastPage = "";
 			
 			HeaderElementIterator iterator = new BasicHeaderElementIterator(response.headerIterator("Link"));
-
+			
 			int i = 0;
 			while (iterator.hasNext()) {
 				HeaderElement elem = iterator.nextElement();
-				
 				if(i == 0) {
 					nextPage = elem.getValue().split("&")[0];
 					i++;
@@ -66,15 +62,12 @@ public class AuthorizedConnectionOauth extends Connection {
 				}
 			}
 			
-			System.out.println("Seuraava sivu: " + nextPage + ", Viimeinen sivu: " + lastPage);
-		
 			
-			
+			//Luetaan vastauksen sisältö(body)
 			HttpEntity entity = response.getEntity();
 			
 			String line = "";
 			String content = "";
-			
 			if (entity != null) {
 			    try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
 			    	while ((line = br.readLine()) != null) {

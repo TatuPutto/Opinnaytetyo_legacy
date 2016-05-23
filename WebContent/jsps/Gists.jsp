@@ -17,12 +17,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js" type="text/javascript"></script>
 <script src="http://localhost:8080/Opinnaytetyo/js/ShowGistFiles.js" type="text/javascript"></script>
 
+<script>
+function showFilters() {
+	$(".filteringOptions").toggle("slow");
+}
+</script>
+
 <title>Gists</title>
 </head>
 <body>
 <div class="container">
 	<%@ include file="Header.jsp" %>
 	<div class="content">
+	
+		<div class="filters">
+			<input type="button" id="showFilters" value="Lisää suodattimia" onclick="showFilters()"/>
+			
+			<div class="filteringOptions" style="display: none;height: 200px;">
+				<input type="button" id="getUsersGists" value="Omat gistit"/>
+				<input type="button" id="getAllPublicGists" value="Muut gistit"/>
+			</div>
+		</div>
+	
 	
 		<div class="contentLeft">
 			<!-- Listataan gistit -->
@@ -33,8 +49,6 @@
 			}
 			%>
 			
-			<input type="button" id="getUsersGists" value="Omat gistit"/>
-			<input type="button" id="getAllPublicGists" value="Muut gistit"/>
 			
 			
 			<div class="listGists">
@@ -92,8 +106,15 @@
 			<div class="singleGistFiles">
 				<!-- Gistin tiedot, nimi, kuvaus, tekijä jne. -->
 				<div class="gistInfo">
-					<a id="toGist" href=""></a> 
-					<% 
+					<img class="ownerAvatar" src=""><a id="toGist" href=""></a> 
+					<%
+					if(request.getAttribute("fetchMethod").equals("user")) {
+						%>
+						<input type="button" id="deleteGist" value="Poista"/>
+						<input type="button" id="editGist" value="Muokkaa"/>
+						<%
+					}
+					
 					/*
 					if((Boolean)request.getAttribute("loggedIn")) {
 						

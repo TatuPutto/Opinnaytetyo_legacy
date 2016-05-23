@@ -51,7 +51,7 @@ public class ParseJSONForAJAXResponse {
 					object.put("id", gistId);
 					object.put("description", description);
 					object.put("files", files);
-					object.put("owner", "dafsdf");
+					object.put("owner", owner1);
 					
 					arrToReturn.put(object);
 				}

@@ -4,60 +4,80 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Base64;
 
+import org.apache.http.HeaderElement;
+import org.apache.http.HeaderElementIterator;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeaderElementIterator;
 
+/**
+ * Muodostetaan yhteys GitHubin palvelimeen.
+ * Auktorisointiin käytetään GitHubin Basic Authentication(käyttäjätunnus/salasana) implementaatiota.
+ * https://developer.github.com/v3/auth/ 
+ */
 public class AuthorizedConnectionBasic extends Connection {
 	/**
-	 * Muodostaa yhteyden palvelimeen, lis�� pyynt��n Authorization headerin(Basic).
+	 * Muodostaa yhteyden palvelimeen, lisätään pyyntöön Authorization-headerin(Basic).
 	 * @param method K�ytett�v� HTTP -metodi(GET, POST, PATCH, DELETE).
-	 * @param url URL-osoite, minne pyynt� l�het��n.
-	 * @param data Pyynn�n mukana l�hetett�v� data.
-	 * @param username K�ytt�j�tunnus/sovelluksen client id.
-	 * @param password K�ytt�j�n salasana/sovelluksen client secret
-	 * @return Palauttaa vastauksen sis�ll�n String muodossa.
+	 * @param url URL-osoite, minne pyyntö lähetään.
+	 * @param data Pyynnön mukana lähetettävä data.
+	 * @param username Käyttäjätunnus/sovelluksen client id.
+	 * @param password Käyttäjän salasana/sovelluksen client secret
+	 * @return Palauttaa vastauksen sisällön String muodossa.
 	 */
-	public ArrayList<String> formConnection(String method, String url, String data, String username, String password) {
-		ArrayList<String> responseContent = new ArrayList<String>();
+	public String[] formConnection(String method, String url, String data, String username, String password) {
+		String[] responseContent = new String[5];
+		
 		//Avataan yhteys ja lisataan mukaan auktorisointi header
 		try {
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			HttpRequestBase httpMethod = setHTTPMethod(method, url, data);
 
-			//Muodostetaan ja lis�t��n auktorisointi header pyynt��n
+			//Lisätään Authorization-header
 	        String authInfo = username + ":" + password;
 	        byte[] authBytes = authInfo.getBytes(StandardCharsets.UTF_8);
 	        String authInfoEncoded = Base64.getEncoder().encodeToString(authBytes);
-	        
 		    httpMethod.addHeader("Authorization", "Basic " + authInfoEncoded);
+		    
+		    //Lähetetään pyyntö
 			CloseableHttpResponse response = httpClient.execute(httpMethod);
 			
+			//Haetaan Link-headerin arvot, seuraava sivu ja viimeinen sivu
+			String nextPage = "";
+			String lastPage = "";
+			
+			HeaderElementIterator iterator = new BasicHeaderElementIterator(response.headerIterator("Link"));
+			
+			int i = 0;
+			while (iterator.hasNext()) {
+				HeaderElement elem = iterator.nextElement();
+				if(i == 0) {
+					nextPage = elem.getValue().split("&")[0];
+					i++;
+				}
+				else {
+					lastPage = elem.getValue().split("&")[0];
+				}
+			}
+			
+			//Luetaan vastauksen sisältö(body)
 			HttpEntity entity = response.getEntity();
 
 			String line = "";
 			String content = "";
 			if (entity != null) {
-				//K�sitell��n vastauksen sis�lt� rivi kerrallaan
 			    try(BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()))) {
 			    	while ((line = br.readLine()) != null) {
 			    		content = content.concat(line + "\n");
 					}
-			    	System.out.println(content);
-			    	//Lisätään vastaukoodi ja entityn sisältö taulukkoon
-			    	responseContent.add(Integer.toString(response.getStatusLine().getStatusCode()));
-					responseContent.add(response.getStatusLine().getReasonPhrase());
-			    	responseContent.add(content);
-			    	
 			    	response.close();
 			    } 
 			    catch(IOException e) { 	
-			    	//System.out.println("Vastausta ei pystytty lukemaan.");
 			    	e.printStackTrace();
 			    	httpMethod.abort();
 			    }
@@ -73,6 +93,12 @@ public class AuthorizedConnectionBasic extends Connection {
 			    }
 			}
 			
+			//Palautetaan oleelliset vastauksesta saadut tiedot
+			responseContent[0] = Integer.toString(response.getStatusLine().getStatusCode());
+			responseContent[1] = response.getStatusLine().getReasonPhrase();
+			responseContent[2] = content;
+			responseContent[3] = nextPage;
+			responseContent[4] = lastPage;
 			
 			return responseContent;
 			

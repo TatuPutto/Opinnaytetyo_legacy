@@ -1,7 +1,6 @@
 package tatuputto.opinnaytetyo.connections;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,21 +13,27 @@ import javax.servlet.http.HttpSession;
 import tatuputto.opinnaytetyo.gists.User;
 import tatuputto.opinnaytetyo.json.ParseAuthorizationInfo;
 
-
+/**
+ * Tämä servlet hoitaa sisäänkirjautumisen.
+ */
 @WebServlet("/HandleLogin")
 public class HandleLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+      
+	/**
+	 * Suoritetaan sisäänkirjautumisprosessi.
+	 * Prosessin kulku:
+	 * Tarkistetaan evästeet -> access tokenin sisältävä eväste löytyy -> access token on voimassa -> aloitetaan uusi sessio
+	 * Jos jokin edellämainituista vaiheista ei toteudu, käyttäjä lähetetään tekemään uusi auktorisointi GitHubin kautta.
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ParseAuthorizationInfo parse = new ParseAuthorizationInfo();
-		
 		Cookie cookie = null;
 		Cookie[] cookies = null;
 	    cookies = request.getCookies();
 	    String accessToken = "";
 	    boolean tokenCookieFound = false;
 		
-	   
+	    
 	    //Tarkistetaan löytyykö accesstokenin sisältävää evästettä
 	    if(cookies != null) {
 	    	for (int i = 0; i < cookies.length; i++) {
@@ -45,13 +50,13 @@ public class HandleLogin extends HttpServlet {
 	    	
 	    	//Jos eväste löytyi, tarkistetaan onko access token vielä voimassa
 	    	if(tokenCookieFound) {
-	    		ArrayList<String> responseContent = checkAuthorization(accessToken);	
+	    		String[] responseContent = checkAuthorization(accessToken);	
 	    		
 	    		//Jos eväste on voimassa, aloitetaan sessio
-	    		if(!responseContent.get(0).equals("404")) {
+	    		if(!responseContent[0].equals("404")) {
 	    			log("Access token on voimassa.");
 	    			
-	    			User user = parse.parseJSON(responseContent.get(2));
+	    			User user = new ParseAuthorizationInfo().parseJSON(responseContent[2]);
 	    			
 	    			//Asetetaan tarvittavat sessiomuuttujat
 	    			HttpSession session = request.getSession(true);
@@ -86,10 +91,15 @@ public class HandleLogin extends HttpServlet {
 	}
 	
 	
-	//Selvit��n onko access token voimassa
-	private ArrayList<String> checkAuthorization(String accessToken) {
+	/**
+	 * Tarkistetaan onko access token vielä voimassa.
+	 * @param accessToken Access token, jonka voimassaolo tarkistetaan.
+	 * @return String[] taulukko, joka sisältää vastauksen sisällön.
+	 */
+	private String[] checkAuthorization(String accessToken) {
 		AuthorizedConnectionBasic connection = new AuthorizedConnectionBasic();
 		
+		//Liitetään urliin get-parametreiksi sovellukselle rekisteröity id ja secret
 		String id = GetAccessToken.clientId;
 		String secret = GetAccessToken.clientSecret;
 		String url = "https://api.github.com/applications/" + id + "/tokens/" + accessToken + "";
@@ -97,5 +107,4 @@ public class HandleLogin extends HttpServlet {
 		return connection.formConnection("GET", url, "", id, secret);
 
 	}
-	
 }

@@ -12,8 +12,8 @@ import javax.servlet.http.HttpSession;
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.json.GetGistFilesJSON;
 
-@WebServlet("/GetSingleGistAJAX")
-public class GetSingleGistAJAX extends HttpServlet {
+@WebServlet("/GetSingleGist")
+public class GetSingleGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,9 +29,7 @@ public class GetSingleGistAJAX extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String accessToken = (String)session.getAttribute("accessToken");
 			
-			//Jos accesstoken l�ytyy voidaan hakea julkisia ja salaisia gistej�
-		
-				responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
+			responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
 			
 			
 			
