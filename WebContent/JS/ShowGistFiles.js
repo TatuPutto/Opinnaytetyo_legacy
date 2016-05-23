@@ -76,7 +76,7 @@ function getGistFiles(gistId) {
 	var data = {id : gistId};
 	
 	if(gistId) {
-		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGist", data, function(response) {
+		$.get("http://localhost:8080/Opinnaytetyo/GetSingleGistAJAX", data, function(response) {
 			handleResponse(gistId, response);			
 		});
 	}
@@ -88,9 +88,11 @@ function getGistFiles(gistId) {
 //Puretaan tiedostojen sisältö ACE-editoreihin.
 function handleResponse(gistId, response) {
 	var i = 0;
+	var viewUrl = "http://localhost:8080/Opinnaytetyo/GetSingleGist?id=" + gistId;
 	var owner = response["login"];
 	var ownerAvatarUrl = response["avatarUrl"];
 	var files = response["files"];
+	
 	
 	for(var singleFile in files) {
 		var filename = files[singleFile]["filename"];
@@ -103,10 +105,14 @@ function handleResponse(gistId, response) {
 		//Lisätään ensimmäisen tiedoston koodi jo olemassa olevaan editoriin.
 		if(i === 0) {
 			$(".ownerAvatar").attr("src", ownerAvatarUrl);
-			$("#toGist").attr("href", "");
+			$("#toGist").attr("href", viewUrl);
 			$("#toGist").text(owner + " / " + filename);
 			
+			var uri = encodeURIComponent(filename);
 			$(".gistFirstFile a").text(filename);
+			$(".gistFirstFile a").attr("href", viewUrl + "#" + uri);
+			
+			
 			editor = ace.edit("editor1");
 			editor.setTheme("ace/theme/cobalt");
 			editor.getSession().setMode("ace/mode/java");
@@ -131,10 +137,8 @@ function handleResponse(gistId, response) {
 
 //Lisätään uusi kenttä
 function addField(filename, fileContent, amountOfLines) {
-	//$(".singleGistFiles").append("<div class=\"gistFile" + fileNum + "\">" +
 	$(".singleGistFiles").append("<div class=\"gistFile\">" +
 			"<div class=\"fileInfo\">" +
-			//"<input type=\"text\" class=\"filename\" value=\"" + filename + "\" readonly/>" + 
 			"<a href=\"\">" + filename + "</a>" + 
 			"</div>" +
 			"<div id=\"editor" + fileNum + "\"</div>" +

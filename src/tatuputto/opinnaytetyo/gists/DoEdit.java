@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.json.ParseGistEditJSON;
@@ -22,7 +23,8 @@ public class DoEdit extends HttpServlet {
 	private String[] responseContent;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String accessToken = (String)request.getAttribute("accessToken");
+		HttpSession session = request.getSession(false);
+		String accessToken = (String)session.getAttribute("accessToken");
 	
 		//Luetaan pyynnön mukana lähettetty JSON
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()))) {

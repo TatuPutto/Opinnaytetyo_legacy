@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
@@ -23,11 +24,12 @@ public class EditGist extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ParseSingleGistJSON parse = new ParseSingleGistJSON();
 		AuthorizedConnectionOauth AuthConnection = new AuthorizedConnectionOauth();
+		HttpSession session = request.getSession(false);
 		
 		String gistId = request.getParameter("id");
 		String url = "https://api.github.com/gists/" + gistId;
-		String accessToken = (String)request.getAttribute("accessToken");
-		int userId = (int)request.getAttribute("userId");
+		String accessToken = (String)session.getAttribute("accessToken");
+		int userId = (int)session.getAttribute("userId");
 		
 		String[] responseContent;
 		Gist gist = null;

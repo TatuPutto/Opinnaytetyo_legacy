@@ -55,6 +55,11 @@ a:hover {
 	margin-top: 2px;
 }
 
+.singleGistContainer {
+	padding: 5px;
+}
+
+
 .selected {
 	background-color: #21e054;
 }
@@ -95,7 +100,7 @@ a:hover {
 	height: 40px;	
 }
 
-.ownerAvatar {
+.gistInfo img {
 	width: 30px;
     float: left;
     margin-left: 10px;

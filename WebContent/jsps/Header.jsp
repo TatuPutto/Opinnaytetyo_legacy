@@ -14,7 +14,7 @@
 		
 		<ul id="navmenu">
 			<li><a href="GetGists">Listaa gistit</a></li>
-			<li><a href="CreateNewGist">Luo uusi Gist</a></li>
+			<li><a href="CreateNewGist">Luo uusi gist</a></li>
 			<li><a href="http://localhost:8080/Opinnaytetyo/HandleLogout">Logout</a></li>
 		</ul>
 		<%	

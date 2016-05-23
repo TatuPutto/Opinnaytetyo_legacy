@@ -4,7 +4,6 @@
   <welcome-file-list>
     <welcome-file>/jsps/Login.jsp</welcome-file>
   </welcome-file-list>
-  
   <servlet>
     <servlet-name>GetGists</servlet-name>
     <servlet-class>tatuputto.opinnaytetyo.gists.GetGists</servlet-class>

@@ -36,7 +36,7 @@ public class ParseSingleGistJSON {
 			//Etsitään avain, joka sisältää tiedostojen tarkemmat tiedot nested olioina
 			JSONObject files = jObject.getJSONObject("files");
 
-			Gist gist = new Gist(gistId, description, parseFileObjects(files));
+			Gist gist = new Gist(gistId, description, parseGistOwnerInfo(owner), parseFileObjects(files));
 			
 			return gist;
 		}
@@ -46,7 +46,6 @@ public class ParseSingleGistJSON {
 		return null;
 	}
 	
-
 	
 	/**
 	 * Parsitaan JSONin sisältämä files-olio, joka sisältää tiedostojen tiedot sisennettyinä olioina.
@@ -90,5 +89,22 @@ public class ParseSingleGistJSON {
 	    
 	    return gistFiles;
 	}
+	
+	public User parseGistOwnerInfo(JSONObject ownerInfo) {
+		try {
+			int id = ownerInfo.getInt("id");
+			String login = ownerInfo.getString("login");
+			String avatarUrl = ownerInfo.getString("avatar_url");
+			
+			User owner = new User(id, login, avatarUrl);  
+		    return owner;
+		}	
+		catch (JSONException e) {
+        	e.printStackTrace();
+        }
+		
+		return null;
+	}
+	
 	
 }

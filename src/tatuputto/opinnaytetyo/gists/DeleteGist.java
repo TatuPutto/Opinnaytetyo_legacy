@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 
@@ -17,21 +18,16 @@ public class DeleteGist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthorizedConnectionOauth connection = new AuthorizedConnectionOauth();
-		
-		String accessToken = (String)request.getAttribute("accessToken");
-		if(accessToken != null && !accessToken.isEmpty()) {
-		
-			String gistId = request.getParameter("id");
-			String url = "https://api.github.com/gists/" + gistId;
+		String accessToken = (String)request.getSession(false).getAttribute("accessToken");
+		String gistId = request.getParameter("id");
+	
+		String url = "https://api.github.com/gists/" + gistId;
 			
-			String[] responseContent = connection.formConnection("DELETE", url, "", accessToken);
+		String[] responseContent = new AuthorizedConnectionOauth().formConnection("DELETE", url, "", accessToken);
 		
-			//TODO lähetä vastaukoodi
-		}
+		//TODO lähetä vastaukoodi
 		
-		
-		response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/"));
+		response.sendRedirect("http://localhost:8080/Opinnaytetyo/gists");
 	}
 
 }

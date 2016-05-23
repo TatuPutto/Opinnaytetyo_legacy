@@ -31,12 +31,16 @@ public class GetAccessToken extends HttpServlet {
      */
    	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
    		//TODO  tarkista, ett� statet t�sm��v�t, jos ei t�sm��, lopeta sis��nkirjautumisprosessi
-   		//TODO tallena access_code sessiioon, ehk� ev�steeseen
-   		/*as well as the state you provided in the previous step in a state parameter. If the states don't match, the request has been created by a third party and the process should be aborted.*/
-   		
+   		/*as well as the state you provided in the previous step in a state parameter. 
+   		 *If the states don't match, the request has been created by a third party and the process should be aborted.*/
+   		UnauthorizedConnection connection = new UnauthorizedConnection();
    		String codeToExchange = request.getParameter("code");
    		
-   		URL getAccessToken = new URL("https://github.com/login/oauth/access_token?client_id=" + clientId + "&client_secret=" + clientSecret + "&code=" + codeToExchange);
+   		String url = "https://github.com/login/oauth/access_token?client_id=" + 
+   				clientId + "&client_secret=" + clientSecret + "&code=" + codeToExchange;
+ 
+   		String[] responseContent = connection.formConnection("GET", url, "");
+   		/*URL getAccessToken = new URL(");
    		URLConnection connection = getAccessToken.openConnection();
    		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
    		
@@ -44,9 +48,11 @@ public class GetAccessToken extends HttpServlet {
    		if(br != null){
    			line = br.readLine();
    		}
+   		*/
    		
-        log(line);	
-        String[] token = line.split("&");
+   
+        log(responseContent[2]);	
+        String[] token = responseContent[2].split("&");
         token = token[0].split("=");
         
    		Cookie tokenCookie = new Cookie("accesstoken", token[1]);

@@ -58,27 +58,23 @@ function showFilters() {
 					@SuppressWarnings("unchecked")
 					ArrayList<Gist> gistList = (ArrayList<Gist>)request.getAttribute("gists");
 					
-					String id = "";
-					String description = "";
-					String owner = "";
-					String avatar = "";
-					String name = "";
-					String rawUrl = "";
-					
 					for (int i = 0; i < gistList.size(); i++) {
 						if(gistList.get(i).getFiles().size() > 0) {
-							id = gistList.get(i).getId();
-							description = gistList.get(i).getDescription();
-							owner = gistList.get(i).getOwner().getLogin();
-							avatar = gistList.get(i).getOwner().getAvatarUrl();
-							name = gistList.get(i).getFiles().get(0).getFilename();
-							rawUrl = gistList.get(i).getFiles().get(0).getRawUrl();
+							String id = gistList.get(i).getId();
+							String description = gistList.get(i).getDescription();
+							String owner = gistList.get(i).getOwner().getLogin();
+							String avatar = gistList.get(i).getOwner().getAvatarUrl();
+							String name = gistList.get(i).getFiles().get(0).getFilename();
+							String rawUrl = gistList.get(i).getFiles().get(0).getRawUrl();
+							String viewUrl = "http://localhost:8080/Opinnaytetyo/GetSingleGist?id=" + id;
 							
 							%>
 							<div class="singleGist" id="<%=id %>">
-								<p class="gistOwner"><%=owner %> / <a href=""><%=name %></a></p>
-								<p class="descPara"><%=description %></p>
-								<p><%=i %></p>
+								<div class="singleGistContainer">
+									<p class="gistOwner"><%=owner %> / <a href="<%=viewUrl %>"><%=name %></a></p>
+									<p class="descPara"><%=description %></p>
+									<p><%=i %></p>
+								</div>
 							</div>
 							<%
 						}	
