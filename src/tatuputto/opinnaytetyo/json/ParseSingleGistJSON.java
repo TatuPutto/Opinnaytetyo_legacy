@@ -74,13 +74,18 @@ public class ParseSingleGistJSON {
 	        try {
 	            //Etsitään sisennetystä oliosta tarvittavat tiedoston tiedot
 	        	JSONObject singleFile = (JSONObject)files.get(key);
-	            String filename = singleFile.getString("filename");
-	            String language = singleFile.getString("language");
+	            String filename = singleFile.getString("filename"); 
 	            String rawUrl = singleFile.getString("raw_url");
 	            String content = singleFile.getString("content");
 	            
-	            //Luodaan uusi GistFile-olio, jolle yksittäisen tiedoston parsitut tiedot asetetaan
-	            gistFiles.add(new GistFile(filename, language, rawUrl, content));        
+	            //Yritetään löytää tiedoston ohjelmointikieli
+	            try {
+	            	String language = singleFile.getString("language");
+	            	gistFiles.add(new GistFile(filename, language, rawUrl, content));
+	            }
+	            catch(JSONException e) {
+	            	gistFiles.add(new GistFile(filename, rawUrl, content));
+	            }
 	        } 
 	        catch (JSONException e) {
 	        	e.printStackTrace();
@@ -90,6 +95,11 @@ public class ParseSingleGistJSON {
 	    return gistFiles;
 	}
 	
+	/**
+	 * Parsitaan gistin omistajan tiedot ja luodaan parsittujen tietojen pohjalta user-luokan olio
+	 * @param ownerInfo Gistin omistajan tiedot sisältävä JSON-olio.
+	 * @return Referenssimuuttuja User-luokasta luotuun olioon.
+	 */
 	public User parseGistOwnerInfo(JSONObject ownerInfo) {
 		try {
 			int id = ownerInfo.getInt("id");

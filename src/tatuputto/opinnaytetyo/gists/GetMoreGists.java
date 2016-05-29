@@ -1,9 +1,8 @@
 package tatuputto.opinnaytetyo.gists;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,12 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
-import tatuputto.opinnaytetyo.connections.UnauthorizedConnection;
 import tatuputto.opinnaytetyo.json.ParseJSONForAJAXResponse;
-import tatuputto.opinnaytetyo.json.ParseMultipleGistsJSON;
 
 /**
  * Servlet implementation class GetMoreGists
@@ -42,7 +38,7 @@ public class GetMoreGists extends HttpServlet {
 		 * Link: <https://api.github.com/user/repos?page=3&per_page=100>; rel="next",
   		 * 		<https://api.github.com/user/repos?page=50&per_page=100>; rel="last"
 		 */
-		String url = "https://api.github.com/gists/public?page=" + pageNum + "&per_page=20";
+		String url = "https://api.github.com/gists/public?page=" + pageNum + "&per_page=100";
 		//String url = "https://api.github.com/gists/public?page=1&per_page=30";
 		HttpSession session = request.getSession(false);
 		String accessToken = (String)session.getAttribute("accessToken");
@@ -50,24 +46,18 @@ public class GetMoreGists extends HttpServlet {
 		
 		String[] responseContent = AuthConnection.formConnection("GET", url, "", accessToken);
 		
+		
 		String data = "";
-
-		JSONArray arr = new JSONArray();
 		try {
-			arr = parse.parseJSON(responseContent[2]);
+			data = parse.parseJSON(responseContent[2]).toString();
 		}
 		catch(Exception e) {
-
-		}	
-		
-		data = arr.toString();
-		
-		
+			e.printStackTrace();
+		}		
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(data);
+		
 	}
-
-	
 }

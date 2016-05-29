@@ -3,7 +3,6 @@ package tatuputto.opinnaytetyo.gists;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 import tatuputto.opinnaytetyo.json.ParseGistEditJSON;
-import tatuputto.opinnaytetyo.json.ParseSingleGistJSON;
 
 
 @WebServlet("/DoEdit")

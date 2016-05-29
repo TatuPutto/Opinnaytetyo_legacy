@@ -3,7 +3,6 @@ package tatuputto.opinnaytetyo.gists;
 import tatuputto.opinnaytetyo.connections.AuthorizedConnectionOauth;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

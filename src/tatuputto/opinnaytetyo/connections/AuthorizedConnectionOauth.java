@@ -74,6 +74,8 @@ public class AuthorizedConnectionOauth extends Connection {
 			    		content = content.concat(line + "\n");
 					}
 			    	
+			    	System.out.println(content);
+			    	
 			    	response.close();
 			    } 
 			    catch(IOException e) { 	

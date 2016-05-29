@@ -32,6 +32,9 @@ $("document").ready(function() {
 		}
 	});
 	
+	$(".content").on("click", "#addFilters", function() {
+		$(".filteringOptions").toggle("slow");
+	});
 	
 	
 	//Valitun gistin poistaminen
@@ -62,8 +65,8 @@ $("document").ready(function() {
 		window.location.href = url;	
 	});
 	
+	
 	$(".listGists").on("click", "#loadMore", function() {
-		alert("clicked");
 		loadMoreGists();
 	});
 	
@@ -126,7 +129,7 @@ function handleResponse(gistId, response) {
 		}
 		//Seuraaville tiedostoille tehdään uudet editorit.
 		else {
-			addField(filename, fileContent, amountOfLines);
+			addField(filename, fileContent, viewUrl, amountOfLines);
 		}	
 	}
 	
@@ -136,10 +139,10 @@ function handleResponse(gistId, response) {
 
 
 //Lisätään uusi kenttä
-function addField(filename, fileContent, amountOfLines) {
+function addField(filename, fileContent, viewUrl, amountOfLines) {
 	$(".singleGistFiles").append("<div class=\"gistFile\">" +
 			"<div class=\"fileInfo\">" +
-			"<a href=\"\">" + filename + "</a>" + 
+			"<a href=\"" + viewUrl + "\">" + filename + "</a>" + 
 			"</div>" +
 			"<div id=\"editor" + fileNum + "\"</div>" +
 			"</div>"
@@ -176,7 +179,7 @@ function resetFields() {
 
 
 
-
+//Ladataan lisää gistejä
 function loadMoreGists() {
 	var lastPage = $("#lastPageNum").val();
 	var data = {page: pageNum};
@@ -184,31 +187,35 @@ function loadMoreGists() {
 	if(pageNum <= lastPage) {
 		$.get("http://localhost:8080/Opinnaytetyo/GetMoreGists", data, function(response) {
 			handleNewGists(response);			
+		})
+		.fail(function() {
+		    alert("Uusien gistien lataaminen ei onnistunut.");
 		});
 	}
 	
 	pageNum++;
 }
 
+//
 function handleNewGists(response) {
 	for(var file in response) {
 		var owner = response[file]["owner"];
 		var gistId = response[file]["id"];
 		var filename = response[file]["files"];
 		var description = response[file]["description"];
+		var viewUrl = "http://localhost:8080/Opinnaytetyo/GetSingleGist?id=" + gistId;
 		
-		appendGistToList(owner, gistId, filename, description);
+		appendGistToList(owner, gistId, filename, description, viewUrl);
 	}
+	
+	$("#loadMore").appendTo(".listGists");
 }
 
-var index = 1;
-function appendGistToList(owner, gistId, filename, description) {
+
+function appendGistToList(owner, gistId, filename, description, viewUrl) {
 	$(".listGists").append("<div class=\"singleGist\" id=\"" + gistId + "\">" +
-			"<p class=\"gistOwner\">" + owner + " / <a href=\"\">" + filename + "</a></p>" +
+			"<p class=\"gistOwner\">" + owner + " / <a href=\"" + viewUrl + "\">" + filename + "</a></p>" +
 			"<p class=\"descPara\">" + description + "</p>" +
-			"<br><p class=\"descPara\">More: " + index + "</p>" +
 			"</div>"
 	);
-	index++;
-	
 }

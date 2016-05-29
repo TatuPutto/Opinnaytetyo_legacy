@@ -1,7 +1,7 @@
 package tatuputto.opinnaytetyo.gists;
 
 /**
- * Tämä luokka kuvaa gistin sisältämää yksittäistä tiedostoa
+ * Tï¿½mï¿½ luokka kuvaa gistin sisï¿½ltï¿½mï¿½ï¿½ yksittï¿½istï¿½ tiedostoa
  *
  */
 public class GistFile {
@@ -10,6 +10,11 @@ public class GistFile {
 	private String rawUrl;
 	private String content;
 	
+	
+	public GistFile(String filename, String rawUrl) {
+		this.filename = filename;
+		this.rawUrl = rawUrl;
+	}
 	
 	public GistFile(String filename, String language, String rawUrl) {
 		this.filename = filename;
@@ -54,7 +59,7 @@ public class GistFile {
 	
 	public String toString() {
 		return "\nTiedostonimi: " + this.filename + "\nOhjelmointikieli: " + this.language + 
-			   "\nUrl lähdekoodiin: " + this.rawUrl + "\nLähdekoodi: " + this.content;
+			   "\nUrl lï¿½hdekoodiin: " + this.rawUrl + "\nLï¿½hdekoodi: " + this.content;
 	}
 	
 	

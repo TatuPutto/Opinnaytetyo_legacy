@@ -3,7 +3,6 @@ package tatuputto.opinnaytetyo.json;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import tatuputto.opinnaytetyo.gists.Gist;
 
 public class ParseGistEditJSON {
 	public String parseJSON(String JSONresponse) {
