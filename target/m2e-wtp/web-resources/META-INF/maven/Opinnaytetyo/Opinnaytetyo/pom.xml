@@ -6,7 +6,6 @@
   <packaging>war</packaging>
   <name>Opinnaytetyo</name>
   
-  
   <dependencies>
     <dependency>
         <groupId>org.springframework</groupId>
@@ -24,6 +23,7 @@
 	    <version>20160212</version>
 	</dependency>
   </dependencies>
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>

@@ -36,19 +36,16 @@ public class ParseJSONForAJAXResponse {
 				//Etsit��n avain, joka sis�lt�� gistin tiedostot
 				String files = parseNestedObjects(singleGistObj.getJSONObject("files"));
 				
-				//JSONObject owner = new JSONObject();
-				
-				String owner = "";
 				try {
-
+					//String owner = "";
 					//owner1 = parseGistOwnerInfo(singleGistObj.getJSONObject("owner"));
-					
+					JSONObject owner = singleGistObj.getJSONObject("owner");
 					
 					JSONObject object = new JSONObject(); 
 					object.put("id", gistId);
 					object.put("description", description);
 					object.put("files", files);
-					object.put("owner", owner);
+					object.put("owner", owner.getString("login"));
 					
 					arrToReturn.put(object);
 				}

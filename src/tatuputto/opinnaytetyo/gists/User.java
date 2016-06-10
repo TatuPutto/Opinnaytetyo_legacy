@@ -4,7 +4,7 @@ public class User {
 	private int id;
 	private String login;
 	private String avatarUrl;
-	
+	private String accessToken;
 	
 	public User(int id, String login, String avatarUrl) {
 		this.id = id;
@@ -12,6 +12,12 @@ public class User {
 		this.avatarUrl = avatarUrl;
 	}
 	
+	public User(int id, String login, String avatarUrl, String accessToken) {
+		this.id = id;
+		this.login = login;
+		this.avatarUrl = avatarUrl;
+		this.accessToken = accessToken;
+	}
 	
 	
 	public int getId() {
@@ -35,7 +41,13 @@ public class User {
 		this.avatarUrl = avatarUrl;
 	}
 	
-	
+	public String getAccessToken() {
+		return accessToken;
+	}
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
 	public String toString() {
 		return id + ", " + login;
 	}
